@@ -1,0 +1,65 @@
+<?php
+/**
+ * Tawk.to
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to support@tawk.to so we can send you a copy immediately.
+ *
+ * @copyright   Copyright (c) 2016 Tawk.to
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+?>
+
+<script type="text/javascript">
+    require(['jquery', 'jquery/ui'], function($){ 
+	    $.noConflict();
+	    jQuery(function() {
+	        var iframe = jQuery('#tawk_widget_customization')[0],
+	            storeHierarchy = <?php echo json_encode($this->getHierarchy()) ?>;
+
+	        window.addEventListener('message', function(e) {
+	            if(e.origin === '<?php echo $this->getBaseUrl() ?>') {
+	                if(e.data.action === 'setWidget') {
+	                    setWidget(e);
+	                }
+	                if(e.data.action === 'removeWidget') {
+	                    removeWidget(e);
+	                }
+	                if(e.data.action === 'getIdValues') {
+	                    e.source.postMessage({action: 'idValues', values : storeHierarchy}, '<?php echo $this->getBaseUrl() ?>');
+	                }
+	            }
+	        });
+
+	        function setWidget(e) {
+	            jQuery.post('<?php echo $this->getFormAction() ?>', {
+	                pageId   : e.data.pageId,
+	                widgetId : e.data.widgetId,
+	                id       : e.data.id,
+	                form_key : '<?php echo $this->getFormKey() ?>'
+	            }, function(response) {
+	                e.source.postMessage({action : 'setDone'}, '<?php echo $this->getBaseUrl() ?>');
+	            });
+	        }
+
+	        function removeWidget(e) {
+	            jQuery.get('<?php echo $this->getRemoveUrl() ?>?id=' + e.data.id, function (response) {
+	                e.source.postMessage({action : 'removeDone'}, '<?php echo $this->getBaseUrl() ?>');
+	            });
+	        }
+	    });
+ 	});
+</script>
+
+<iframe
+    id="tawk_widget_customization"
+    style="border:none; width:100%; margin: 0 0 0 0; padding: 0 0 0 0; min-height: 450px"
+    src="<?php echo $this->getIframeUrl() ?>">
+</iframe>
