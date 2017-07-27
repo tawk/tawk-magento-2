@@ -73,6 +73,81 @@ class Embed extends Template
 			return '';
 		}
 
-		return parent::_toHtml();
+		$alwaysdisplay = $this->model->getAlwaysDisplay();
+		$donotdisplay = $this->model->getDoNotDisplay();
+		$display = true;
+
+		if($alwaysdisplay == 1){
+			$display = true;
+			
+			$excluded_url_list = $this->model->getExcludeUrl();
+
+			if(strlen( $excluded_url_list ) > 0 )
+			{
+				$current_url = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+				$current_url = urldecode($current_url);
+
+				$ssl      = ( ! empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] == 'on' );
+			    $sp       = strtolower( $_SERVER['SERVER_PROTOCOL'] );
+			    $protocol = substr( $sp, 0, strpos( $sp, '/' ) ) . ( ( $ssl ) ? 's' : '' );
+
+			    $current_url = $protocol.'://'.$current_url;
+			    $current_url = strtolower($current_url);
+
+			    #$exclude_url = trim( strtolower( $this->model->getExcludeUrl() ) );
+			    $current_url = trim( strtolower( $current_url ) );
+				
+				
+				$excluded_url_list = preg_split("/,/", $excluded_url_list);
+
+				foreach($excluded_url_list as $exclude_url)
+				{
+			    	$exclude_url = strtolower(urldecode(trim($exclude_url)));
+			    	if (strpos($current_url, $exclude_url) !== false) 
+					{
+						$display = false;
+					}
+				}
+			}
+		}else{
+			$display = false;
+		}
+
+
+		if($donotdisplay == 1){
+			$display = false;
+
+			$included_url_list = $this->model->getIncludeUrl();
+			if(strlen( $included_url_list ) > 0 )
+			{
+				$current_url = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+				$current_url = urldecode($current_url);
+
+				$ssl      = ( ! empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] == 'on' );
+			    $sp       = strtolower( $_SERVER['SERVER_PROTOCOL'] );
+			    $protocol = substr( $sp, 0, strpos( $sp, '/' ) ) . ( ( $ssl ) ? 's' : '' );
+
+			    $current_url = $protocol.'://'.$current_url;
+			    $current_url = strtolower($current_url);
+
+			    $current_url = trim( strtolower( $current_url ) );
+
+				$included_url_list = preg_split("/,/", $included_url_list);
+				foreach($included_url_list as $include_url)
+				{
+			    	$exclude_url = strtolower(urldecode(trim($include_url)));
+			    	if (strpos($current_url, $include_url) !== false) 
+					{
+						$display = true;
+					}
+				}
+			}
+		}
+		
+		if($display == true){		
+			return parent::_toHtml();
+		}else{
+			return '';
+		}
 	}
 }

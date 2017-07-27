@@ -24,7 +24,7 @@ use Tawk\Widget\Model\WidgetFactory;
 class SelectWidgetBlock extends Template
 {
     const BASE_URL = 'https://plugins.tawk.to';
-    protected $logger;
+    protected $logger; 
     protected $modelWidgetFactory;
 
     public function __construct(Template\Context $context, WidgetFactory $modelFactory, array $data = []) 
@@ -34,6 +34,27 @@ class SelectWidgetBlock extends Template
         $this->modelWidgetFactory = $modelFactory;
     }
 
+    function mainurl(){
+        if(isset($_SERVER['HTTPS'])){
+            $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
+        }
+        else{
+            $protocol = 'http';
+        }
+        return $protocol . "://" . $_SERVER['HTTP_HOST'];
+    }
+    
+    public function getWebSiteoptions(){
+        $sdstr = '';
+
+        $websites = $this->_storeManager->getWebsites();
+        #$sdstr .= '<option value="0">Select Store</option>';
+        foreach ($websites as $website) {
+            $sdstr .= '<option value="'.$website->getId().'">'.$website->getName().'</option>';
+        }
+        return $sdstr;
+    }
+
     public function _prepareLayout()
     {
         return parent::_prepareLayout();
@@ -41,11 +62,18 @@ class SelectWidgetBlock extends Template
 
     public function getIframeUrl()
     {
+        /*
         return $this->getBaseUrl()
             .'/generic/widgets'
             .'?parentDomain='.$this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB)
             .'&selectType=singleIdSelect'
             .'&selectText=Store';
+        */
+        
+        return $this->getBaseUrl().'/generic/widgets'
+                .'?currentWidgetId=&currentPageId=&transparentBackground=1'
+                .'&parentDomain='.$this->mainurl();
+
     }
 
     public function getBaseUrl() {
@@ -88,6 +116,10 @@ class SelectWidgetBlock extends Template
 
     public function getRemoveUrl() {
         return $this->getUrl('widget/removewidget', ['_secure' => true]);
+    }
+
+    public function getStoreWidget(){
+        return $this->getUrl('widget/storewidget', ['_secure' => true]);
     }
 
     private function parseGroups($groups) {

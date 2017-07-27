@@ -53,6 +53,30 @@ class InstallSchema implements InstallSchemaInterface
             50,
             [],
             'Widget Id'
+        )->addColumn(
+            'always_display',
+            Table::TYPE_INTEGER,
+            1,
+            [],
+            'always_display'
+        )->addColumn(
+            'exclude_url',
+            Table::TYPE_TEXT,
+            255,
+            [],
+            'exclude_url'
+        )->addColumn(
+            'do_not_display',
+            Table::TYPE_INTEGER,
+            1,
+            [],
+            'do_not_display'
+        )->addColumn(
+            'include_url',
+            Table::TYPE_TEXT,
+            255,
+            [],
+            'include_url'
         )->setComment(
             'Tawk Widget table that makes connection between stores and widgets'
         );

@@ -16,7 +16,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-namespace Tawk\Widget\Controller\Adminhtml\SaveWidget;
+namespace Tawk\Widget\Controller\Adminhtml\StoreWidget;
 
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Backend\App\Action\Context;
@@ -39,29 +39,23 @@ class Index extends \Magento\Backend\App\Action
         $response = $this->resultJsonFactory->create();
         $response->setHeader('Content-type', 'application/json');
 
-        if(!is_string(filter_input(INPUT_POST, 'pageId', FILTER_SANITIZE_STRING)) || !is_string(filter_input(INPUT_POST, 'widgetId', FILTER_SANITIZE_STRING)) || !is_string(filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING))) {
-            return $response->setData(['success' => FALSE]);
-        }
-
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $model = $objectManager->get('Tawk\Widget\Model\Widget')->loadByForStoreId(filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING));
+        $model = $objectManager->get('Tawk\Widget\Model\Widget')->loadByForStoreId(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_STRING));
 
-        if( ($_POST['pageId'] == '-1') && ($_POST['widgetId'] == '-1') ){
-
-        }else{
-            $model->setPageId(filter_input(INPUT_POST, 'pageId', FILTER_SANITIZE_STRING));
-            $model->setWidgetId(filter_input(INPUT_POST, 'widgetId', FILTER_SANITIZE_STRING));
+        if(!$model->hasId()) {
+            $model = $objectManager->get('Tawk\Widget\Model\Widget');
         }
-        $model->setForStoreId($_POST['id']);
 
-        $model->setAlwaysDisplay($_POST['alwaysdisplay']);
-        $model->setExcludeUrl($_POST['excludeurl']);
+        $pageId = $model->getPageId();
+        $widgetId =  $model->getWidgetId();
 
-        $model->setDoNotDisplay($_POST['donotdisplay']);
-        $model->setIncludeUrl($_POST['includeurl']);
 
-        $model->save();
+        $alwaysdisplay = $model->getAlwaysDisplay();
+        $excludeurl = $model->getExcludeUrl();
 
-        return $response->setData(['success' => TRUE]);
+        $donotdisplay = $model->getDoNotDisplay();
+        $includeurl = $model->getIncludeUrl();
+
+        return $response->setData(['success' => TRUE,'pageid' => $pageId,'widgetid' => $widgetId,'alwaysdisplay' => $alwaysdisplay,'excludeurl' => $excludeurl,'donotdisplay' => $donotdisplay,'includeurl' => $includeurl]);
     }
 }
