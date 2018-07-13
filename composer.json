@@ -1,5 +1,5 @@
 {
-  "name": "tawk/widget",
+  "name": "baldwin/magento2-module-tawk",
   "description": "Tawk live chat widget",
   "type": "magento2-module",
   "version": "1.0.0",
