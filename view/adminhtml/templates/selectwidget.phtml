@@ -16,6 +16,19 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 ?>
+<?php
+$jsonConfig = [
+    "formKey" => $block->getFormkey(),
+    "formAction" => $block->getFormAction(),
+    "baseUrl" => $block->getBaseUrl(),
+    "storeWidget" => $block->getStoreWidget(),
+    "mainUrl" =>  $block->mainurl(),
+    "removeUrl" => $this->getRemoveUrl()
+];
+
+$jsonConfig = json_encode($jsonConfig);
+
+?>
  <style>
 
 .websiteids:focus{
@@ -135,164 +148,14 @@ input:checked + .slider:before {
 	color: #fff;
 }
 </style>
-<script type="text/javascript">
-    require(['jquery', 'jquery/ui'], function($){ 
-	    $.noConflict();
-	    jQuery(function() {
-	    	
-	    	jQuery.get('<?php echo $this->getStoreWidget() ?>?id=' + jQuery( "#websiteids" ).val(), function (response) {			   
-			   document.getElementById('tawk_widget_customization').src = 'https://plugins.tawk.to/generic/widgets?currentWidgetId=' + response.widgetid + '&currentPageId='+ response.pageid +'&transparentBackground=1&parentDomain=<?php echo $this->mainurl() ?>';
-
-				jQuery('#excludeurl').val(response.excludeurl);
-				jQuery('#includeurl').val(response.includeurl);
-				if(response.alwaysdisplay == 1){
-					jQuery('#alwaysdisplay').prop('checked', true);
-					jQuery("#exlucded_urls_container").show();
-				}else{
-					jQuery('#alwaysdisplay').prop('checked', false);
-					jQuery("#exlucded_urls_container").hide();
-				}
-				if(response.donotdisplay == 1){
-					jQuery('#donotdisplay').prop('checked', true);
-					jQuery("#included_urls_container").show();
-				}else{
-					jQuery('#donotdisplay').prop('checked', false);
-					jQuery("#included_urls_container").hide();
-				}
-
-			});
-			
-
-	        if(jQuery("#alwaysdisplay").prop("checked")){
-				jQuery("#exlucded_urls_container").show();
-			}else{
-				jQuery("#exlucded_urls_container").hide();
-			}
-
-			if(jQuery("#donotdisplay").prop("checked")){
-				jQuery("#included_urls_container").show();
-			}else{
-				jQuery("#included_urls_container").hide();
-			}
-
-			window.addEventListener('message', function(e) {
-	            if(e.origin === '<?php echo $this->getBaseUrl() ?>') {
-	                if(e.data.action === 'setWidget') {
-	                    setWidget(e);
-	                }
-	                if(e.data.action === 'removeWidget') {
-	                    removeWidget(e);
-	                }
-	            }
-	        });
-	        
-	        function setWidget(e) {
-	        	alwaysdisplay = jQuery('#alwaysdisplay').is(":checked");
-				var alwaysdisplayvalue = alwaysdisplay ? 1 : 0;
-
-				donotdisplay = jQuery('#donotdisplay').is(":checked");
-				var donotdisplayvalue = donotdisplay ? 1 : 0;
-
-	            jQuery.post('<?php echo $this->getFormAction() ?>', {
-	                pageId   : e.data.pageId,
-	                widgetId : e.data.widgetId,
-	                id       : jQuery('#websiteids').val(),
-	            	excludeurl : jQuery('#excludeurl').val(),
-					includeurl : jQuery('#includeurl').val(),
-					alwaysdisplay : alwaysdisplayvalue,
-					donotdisplay: donotdisplayvalue,
-	                form_key : '<?php echo $this->getFormKey() ?>'
-	            }, function(response) {
-	                e.source.postMessage({action : 'setDone'}, '<?php echo $this->getBaseUrl() ?>');
-	            });
-	        }
-
-	        function removeWidget(e) {
-	            jQuery.get('<?php echo $this->getRemoveUrl() ?>?id=' + e.data.id, function (response) {
-	                e.source.postMessage({action : 'removeDone'}, '<?php echo $this->getBaseUrl() ?>');
-	            });
-	        }
-
-	        jQuery(".savesettingsbtn" ).click(function(e) {
-				e.preventDefault();
-				alwaysdisplay = jQuery('#alwaysdisplay').is(":checked");
-				var alwaysdisplayvalue = alwaysdisplay ? 1 : 0;
-
-				donotdisplay = jQuery('#donotdisplay').is(":checked");
-				var donotdisplayvalue = donotdisplay ? 1 : 0;
-
-				jQuery.post('<?php echo $this->getFormAction() ?>', {
-					pageId     : "-1",
-					widgetId   : "-1",
-					id         : jQuery('#websiteids').val(),
-					excludeurl : jQuery('#excludeurl').val(),
-					includeurl : jQuery('#includeurl').val(),
-					alwaysdisplay : alwaysdisplayvalue,
-					donotdisplay: donotdisplayvalue,
-					form_key : '<?php echo $this->getFormKey() ?>'
-				}, function() {
-					alert('Visibility options Saved');
-				});
-			});
-
-	        jQuery('#websiteids').on('change', function() {
-	          if(this.value == 0){
-	          	document.getElementById('tawk_widget_customization').src = "";
-	          	jQuery("#visibility_options").hide();
-	          }else{
-				  jQuery.get('<?php echo $this->getStoreWidget() ?>?id=' + this.value, function (response) {			   
-					   document.getElementById('tawk_widget_customization').src = 'https://plugins.tawk.to/generic/widgets?currentWidgetId=' + response.widgetid + '&currentPageId='+ response.pageid +'&transparentBackground=1&parentDomain=<?php echo $this->mainurl() ?>';
-						jQuery("#visibility_options").show();	   
-				  });
-
-				 	jQuery('#excludeurl').val(response.excludeurl);
-					jQuery('#includeurl').val(response.includeurl);
-					if(response.alwaysdisplay == 1){
-						jQuery('#alwaysdisplay').prop('checked', true);
-						jQuery("#exlucded_urls_container").show();
-					}else{
-						jQuery('#alwaysdisplay').prop('checked', false);
-						jQuery("#exlucded_urls_container").hide();
-					}
-					if(response.donotdisplay == 1){
-						jQuery('#donotdisplay').prop('checked', true);
-						jQuery("#included_urls_container").show();
-					}else{
-						jQuery('#donotdisplay').prop('checked', false);
-						jQuery("#included_urls_container").hide();
-					}
-
-			  }	
-			});
-
-			jQuery("#alwaysdisplay").change(function() {
-				if(this.checked){
-					jQuery("#exlucded_urls_container").show();
-					jQuery('#donotdisplay').prop('checked', false);
-					jQuery("#included_urls_container").hide();
-				}else{
-					jQuery("#exlucded_urls_container").hide();
-					jQuery('#donotdisplay').prop('checked', true);
-					jQuery("#included_urls_container").show();
-				}
-			});
-
-			jQuery("#donotdisplay").change(function() {
-				if(this.checked){
-					jQuery("#included_urls_container").show();
-					jQuery('#alwaysdisplay').prop('checked', false);
-					jQuery("#exlucded_urls_container").hide();
-				}else{
-					jQuery("#included_urls_container").hide();
-					jQuery('#alwaysdisplay').prop('checked', true);
-					jQuery("#exlucded_urls_container").show();
-				}
-			});
-
-
-
-	    });
- 	});
+<script type="text/x-magento-init">
+        {
+            "*": {
+                "selectWidget": {
+                    "spConfig": <?php echo $jsonConfig; ?>
+                }
+            }
+        }
 </script>
 
 <label for="websiteids" class="websiteids_label">Select Store</label>
