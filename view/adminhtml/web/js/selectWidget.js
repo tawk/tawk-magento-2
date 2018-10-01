@@ -20,7 +20,7 @@ define(['jquery', 'jquery/ui'],
 
         _initialize: function() {
             var $widget = this;
-            
+
             jQuery.get($widget.options.spConfig.storeWidget + '?id=' + jQuery( "#websiteids" ).val(), function (response) {
                 document.getElementById('tawk_widget_customization').src = 'https://plugins.tawk.to/generic/widgets?currentWidgetId=' + response.widgetid + '&currentPageId='+ response.pageid +'&transparentBackground=1&parentDomain=' + $widget.options.spConfig.mainUrl;
 
@@ -57,11 +57,12 @@ define(['jquery', 'jquery/ui'],
             }
 
             window.addEventListener('message', function(e) {
-                if(e.origin === '<?php echo $this->getBaseUrl() ?>') {
+                if(e.origin === $widget.options.spConfig.baseUrl) {
                     if(e.data.action === 'setWidget') {
                         setWidget(e);
                     }
                     if(e.data.action === 'removeWidget') {
+                        e.data.id = jQuery('#websiteids').val();
                         removeWidget(e);
                     }
                 }
