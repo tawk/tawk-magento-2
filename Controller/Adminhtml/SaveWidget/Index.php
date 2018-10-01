@@ -26,12 +26,19 @@ class Index extends \Magento\Backend\App\Action
 {
     protected $resultJsonFactory;
     protected $logger;
+    protected $widgetFactory;
 
-    public function __construct(Context $context, JsonFactory $resultJsonFactory, LoggerInterface $logger)
+    public function __construct(
+        Context $context,
+        JsonFactory $resultJsonFactory,
+        LoggerInterface $logger,
+        \Tawk\Widget\Model\WidgetFactory $widgetFactory
+    )
     {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->logger = $logger;
+        $this->widgetFactory = $widgetFactory;
     }
 
     public function execute()
@@ -39,12 +46,16 @@ class Index extends \Magento\Backend\App\Action
         $response = $this->resultJsonFactory->create();
         $response->setHeader('Content-type', 'application/json');
 
-        if(!is_string(filter_input(INPUT_POST, 'pageId', FILTER_SANITIZE_STRING)) || !is_string(filter_input(INPUT_POST, 'widgetId', FILTER_SANITIZE_STRING)) || !is_string(filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING))) {
+        if(
+            !is_string(filter_input(INPUT_POST, 'pageId', FILTER_SANITIZE_STRING)) ||
+            !is_string(filter_input(INPUT_POST, 'widgetId', FILTER_SANITIZE_STRING)) ||
+            !is_string(filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING))
+        ) {
             return $response->setData(['success' => FALSE]);
         }
 
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $model = $objectManager->get('Tawk\Widget\Model\Widget')->loadByForStoreId(filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING));
+        $storeId = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING);
+        $model = $this->widgetFactory->create()->loadByForStoreId($storeId);
 
         if( ($_POST['pageId'] == '-1') && ($_POST['widgetId'] == '-1') ){
 

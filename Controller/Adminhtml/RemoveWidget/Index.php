@@ -26,20 +26,28 @@ class Index extends \Magento\Backend\App\Action
 {
     protected $resultJsonFactory;
     protected $logger;
+    protected $widgetFactory;
 
-    public function __construct(Context $context, JsonFactory $resultJsonFactory, LoggerInterface $logger)
+    public function __construct(
+        Context $context,
+        JsonFactory $resultJsonFactory,
+        LoggerInterface $logger,
+        \Tawk\Widget\Model\WidgetFactory $widgetFactory
+    )
     {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->logger = $logger;
+        $this->widgetFactory = $widgetFactory;
     }
 
     public function execute()
     {
         $response = $this->resultJsonFactory->create();
         $response->setHeader('Content-type', 'application/json');
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $objectManager->get('Tawk\Widget\Model\Widget')->loadByForStoreId(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_STRING))->delete();
+        $storeId = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_STRING);
+        $widget = $this->widgetFactory->create()->loadByForStoreId($storeId);
+        $widget->delete();
 
         return $response->setData(['success' => TRUE]);
     }
