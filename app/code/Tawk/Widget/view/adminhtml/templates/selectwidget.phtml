@@ -1,0 +1,338 @@
+<?php
+/**
+ * Tawk.to
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to support@tawk.to so we can send you a copy immediately.
+ *
+ * @copyright   Copyright (c) 2016 Tawk.to
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+?>
+ <style>
+
+.websiteids:focus{
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+	border-color: #66afe9;
+	outline:0 none;
+
+}
+.websiteids {
+    width: 350px;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+
+}
+
+.websiteids_label {
+    display: inline-block;
+    font-size: 15px;
+    font-weight: bold;
+    width: 200px;
+}
+
+.tawk_fields{
+	margin:15px 0;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.savesettingsbtn{
+	background-color: #5cb85c;
+    border-color: #4cae4c;
+    color: #fff;
+   -moz-user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    padding: 6px 12px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.savesettingsbtn:hover{
+	text-decoration: none;
+	color: #fff;
+}
+</style>
+<script type="text/javascript">
+    require(['jquery', 'jquery/ui'], function($){ 
+	    $.noConflict();
+	    jQuery(function() {
+	    	
+	    	jQuery.get('<?php echo $this->getStoreWidget() ?>?id=' + jQuery( "#websiteids" ).val(), function (response) {			   
+			   document.getElementById('tawk_widget_customization').src = 'https://plugins.tawk.to/generic/widgets?currentWidgetId=' + response.widgetid + '&currentPageId='+ response.pageid +'&transparentBackground=1&parentDomain=<?php echo $this->mainurl() ?>';
+
+				jQuery('#excludeurl').val(response.excludeurl);
+				jQuery('#includeurl').val(response.includeurl);
+				if(response.alwaysdisplay == 1){
+					jQuery('#alwaysdisplay').prop('checked', true);
+					jQuery("#exlucded_urls_container").show();
+				}else{
+					jQuery('#alwaysdisplay').prop('checked', false);
+					jQuery("#exlucded_urls_container").hide();
+				}
+				if(response.donotdisplay == 1){
+					jQuery('#donotdisplay').prop('checked', true);
+					jQuery("#included_urls_container").show();
+				}else{
+					jQuery('#donotdisplay').prop('checked', false);
+					jQuery("#included_urls_container").hide();
+				}
+
+			});
+			
+
+	        if(jQuery("#alwaysdisplay").prop("checked")){
+				jQuery("#exlucded_urls_container").show();
+			}else{
+				jQuery("#exlucded_urls_container").hide();
+			}
+
+			if(jQuery("#donotdisplay").prop("checked")){
+				jQuery("#included_urls_container").show();
+			}else{
+				jQuery("#included_urls_container").hide();
+			}
+
+			window.addEventListener('message', function(e) {
+	            if(e.origin === '<?php echo $this->getBaseUrl() ?>') {
+	                if(e.data.action === 'setWidget') {
+	                    setWidget(e);
+	                }
+	                if(e.data.action === 'removeWidget') {
+	                    removeWidget(e);
+	                }
+	            }
+	        });
+	        
+	        function setWidget(e) {
+	        	alwaysdisplay = jQuery('#alwaysdisplay').is(":checked");
+				var alwaysdisplayvalue = alwaysdisplay ? 1 : 0;
+
+				donotdisplay = jQuery('#donotdisplay').is(":checked");
+				var donotdisplayvalue = donotdisplay ? 1 : 0;
+
+	            jQuery.post('<?php echo $this->getFormAction() ?>', {
+	                pageId   : e.data.pageId,
+	                widgetId : e.data.widgetId,
+	                id       : jQuery('#websiteids').val(),
+	            	excludeurl : jQuery('#excludeurl').val(),
+					includeurl : jQuery('#includeurl').val(),
+					alwaysdisplay : alwaysdisplayvalue,
+					donotdisplay: donotdisplayvalue,
+	                form_key : '<?php echo $this->getFormKey() ?>'
+	            }, function(response) {
+	                e.source.postMessage({action : 'setDone'}, '<?php echo $this->getBaseUrl() ?>');
+	            });
+	        }
+
+	        function removeWidget(e) {
+	            jQuery.get('<?php echo $this->getRemoveUrl() ?>?id=' + e.data.id, function (response) {
+	                e.source.postMessage({action : 'removeDone'}, '<?php echo $this->getBaseUrl() ?>');
+	            });
+	        }
+
+	        jQuery(".savesettingsbtn" ).click(function(e) {
+				e.preventDefault();
+				alwaysdisplay = jQuery('#alwaysdisplay').is(":checked");
+				var alwaysdisplayvalue = alwaysdisplay ? 1 : 0;
+
+				donotdisplay = jQuery('#donotdisplay').is(":checked");
+				var donotdisplayvalue = donotdisplay ? 1 : 0;
+
+				jQuery.post('<?php echo $this->getFormAction() ?>', {
+					pageId     : "-1",
+					widgetId   : "-1",
+					id         : jQuery('#websiteids').val(),
+					excludeurl : jQuery('#excludeurl').val(),
+					includeurl : jQuery('#includeurl').val(),
+					alwaysdisplay : alwaysdisplayvalue,
+					donotdisplay: donotdisplayvalue,
+					form_key : '<?php echo $this->getFormKey() ?>'
+				}, function() {
+					alert('Visibility options Saved');
+				});
+			});
+
+	        jQuery('#websiteids').on('change', function() {
+	          if(this.value == 0){
+	          	document.getElementById('tawk_widget_customization').src = "";
+	          	jQuery("#visibility_options").hide();
+	          }else{
+				  jQuery.get('<?php echo $this->getStoreWidget() ?>?id=' + this.value, function (response) {			   
+					   document.getElementById('tawk_widget_customization').src = 'https://plugins.tawk.to/generic/widgets?currentWidgetId=' + response.widgetid + '&currentPageId='+ response.pageid +'&transparentBackground=1&parentDomain=<?php echo $this->mainurl() ?>';
+						jQuery("#visibility_options").show();	   
+				  });
+
+				 	jQuery('#excludeurl').val(response.excludeurl);
+					jQuery('#includeurl').val(response.includeurl);
+					if(response.alwaysdisplay == 1){
+						jQuery('#alwaysdisplay').prop('checked', true);
+						jQuery("#exlucded_urls_container").show();
+					}else{
+						jQuery('#alwaysdisplay').prop('checked', false);
+						jQuery("#exlucded_urls_container").hide();
+					}
+					if(response.donotdisplay == 1){
+						jQuery('#donotdisplay').prop('checked', true);
+						jQuery("#included_urls_container").show();
+					}else{
+						jQuery('#donotdisplay').prop('checked', false);
+						jQuery("#included_urls_container").hide();
+					}
+
+			  }	
+			});
+
+			jQuery("#alwaysdisplay").change(function() {
+				if(this.checked){
+					jQuery("#exlucded_urls_container").show();
+					jQuery('#donotdisplay').prop('checked', false);
+					jQuery("#included_urls_container").hide();
+				}else{
+					jQuery("#exlucded_urls_container").hide();
+					jQuery('#donotdisplay').prop('checked', true);
+					jQuery("#included_urls_container").show();
+				}
+			});
+
+			jQuery("#donotdisplay").change(function() {
+				if(this.checked){
+					jQuery("#included_urls_container").show();
+					jQuery('#alwaysdisplay').prop('checked', false);
+					jQuery("#exlucded_urls_container").hide();
+				}else{
+					jQuery("#included_urls_container").hide();
+					jQuery('#alwaysdisplay').prop('checked', true);
+					jQuery("#exlucded_urls_container").show();
+				}
+			});
+
+
+
+	    });
+ 	});
+</script>
+
+<label for="websiteids" class="websiteids_label">Select Store</label>
+<select name="websiteids" id="websiteids" class="websiteids">
+<?php echo $this->getWebSiteoptions(); ?>
+</select>
+
+<iframe
+    id="tawk_widget_customization"
+    style="border:none; width:100%; margin: 0 0 0 0; padding: 0 0 0 0; min-height: 300px"
+    src="<?php echo $this->getIframeUrl() ?>">
+</iframe>
+
+<div id="visibility_options">
+<h3>Visibility Options</h3>
+<div class="tawk_fields">
+	<label for="alwaysdisplay" class="websiteids_label">Always Display widget</label>
+	<label class="switch">
+	  <input type="checkbox" id= "alwaysdisplay" name="alwaysdisplay"  class="tawk_check">
+	  <div class="slider round"></div>
+	</label>
+</div>
+<div class="tawk_fields" id="exlucded_urls_container">
+	<label for="excludeurl">(Exception) hide tawk.to widget to the following URL</label>
+	<BR />
+	<textarea name="excludeurl" id="excludeurl" rows="10" style="width:80%;" ></textarea>
+</div>
+<div class="tawk_fields">
+	<label for="donotdisplay" class="websiteids_label">Do not Display widget</label>
+	<label class="switch">
+	  <input type="checkbox" value="0" id= "donotdisplay" name="donotdisplay"  class="tawk_check">
+	  <div class="slider round"></div>
+	</label>
+</div>
+<div class="tawk_fields"  id="included_urls_container">
+	<label for="includeurl">(Exception) display tawk.to widget to the following URL</label>
+	<BR />
+	<textarea name="includeurl" id="includeurl" rows="10" style="width:80%;" ></textarea>
+</div>
+<div class="tawk_fields">
+<a class="savesettingsbtn" href="#">Save Visibility Settings</a>
+</div>
+</div>
