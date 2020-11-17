@@ -136,12 +136,20 @@ input:checked + .slider:before {
 }
 </style>
 <script type="text/javascript">
-    require(['jquery', 'jquery/ui'], function($){ 
+    require(['jquery', 'jquery/ui'], function($){
 	    $.noConflict();
 	    jQuery(function() {
-	    	
-	    	jQuery.get('<?php echo $this->getStoreWidget() ?>?id=' + jQuery( "#websiteids" ).val(), function (response) {			   
-			   document.getElementById('tawk_widget_customization').src = 'https://plugins.tawk.to/generic/widgets?currentWidgetId=' + response.widgetid + '&currentPageId='+ response.pageid +'&transparentBackground=1&parentDomain=<?php echo $this->mainurl() ?>';
+
+			jQuery.get('<?php echo $this->getStoreWidget() ?>?id=' + jQuery( "#websiteids" ).val(), function (response) {
+				var src = 'https://plugins.tawk.to/generic/widgets?'
+				if (response.widgetid) {
+					src = src + '&currentWidgetId=' + response.widgetid;
+				}
+				if (response.pageid) {
+					src = src + '&currentPageId=' + response.pageid;
+				}
+				src = src + '&transparentBackground=1&parentDomain=<?php echo $this->mainurl() ?>';
+                document.getElementById('tawk_widget_customization').src = src;
 
 				jQuery('#excludeurl').val(response.excludeurl);
 				jQuery('#includeurl').val(response.includeurl);
@@ -161,7 +169,7 @@ input:checked + .slider:before {
 				}
 
 			});
-			
+
 
 	        if(jQuery("#alwaysdisplay").prop("checked")){
 				jQuery("#exlucded_urls_container").show();
@@ -185,7 +193,7 @@ input:checked + .slider:before {
 	                }
 	            }
 	        });
-	        
+
 	        function setWidget(e) {
 	        	alwaysdisplay = jQuery('#alwaysdisplay').is(":checked");
 				var alwaysdisplayvalue = alwaysdisplay ? 1 : 0;
@@ -208,7 +216,7 @@ input:checked + .slider:before {
 	        }
 
 	        function removeWidget(e) {
-	            jQuery.get('<?php echo $this->getRemoveUrl() ?>?id=' + e.data.id, function (response) {
+	            jQuery.get('<?php echo $this->getRemoveUrl() ?>?id=' + jQuery( "#websiteids" ).val(), function (response) {
 	                e.source.postMessage({action : 'removeDone'}, '<?php echo $this->getBaseUrl() ?>');
 	            });
 	        }
@@ -240,9 +248,9 @@ input:checked + .slider:before {
 	          	document.getElementById('tawk_widget_customization').src = "";
 	          	jQuery("#visibility_options").hide();
 	          }else{
-				  jQuery.get('<?php echo $this->getStoreWidget() ?>?id=' + this.value, function (response) {			   
+				  jQuery.get('<?php echo $this->getStoreWidget() ?>?id=' + this.value, function (response) {
 					   document.getElementById('tawk_widget_customization').src = 'https://plugins.tawk.to/generic/widgets?currentWidgetId=' + response.widgetid + '&currentPageId='+ response.pageid +'&transparentBackground=1&parentDomain=<?php echo $this->mainurl() ?>';
-						jQuery("#visibility_options").show();	   
+						jQuery("#visibility_options").show();
 				  });
 
 				 	jQuery('#excludeurl').val(response.excludeurl);
@@ -262,7 +270,7 @@ input:checked + .slider:before {
 						jQuery("#included_urls_container").hide();
 					}
 
-			  }	
+			  }
 			});
 
 			jQuery("#alwaysdisplay").change(function() {
