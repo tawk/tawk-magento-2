@@ -149,7 +149,7 @@ input:checked + .slider:before {
 					src = src + '&currentPageId=' + response.pageid;
 				}
 				src = src + '&transparentBackground=1&parentDomain=<?php echo $this->mainurl() ?>';
-                document.getElementById('tawk_widget_customization').src = src;
+				document.getElementById('tawk_widget_customization').src = src;
 
 				jQuery('#excludeurl').val(response.excludeurl);
 				jQuery('#includeurl').val(response.includeurl);
