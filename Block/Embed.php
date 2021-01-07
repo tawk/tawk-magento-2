@@ -67,6 +67,19 @@ class Embed extends Template
 		return null;
 	}
 
+	public function getCurrentCustomerDetails(){
+		$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+		$customerSession = $objectManager->create('Magento\Customer\Model\Session');
+		if($customerSession->isLoggedIn()) {
+			$user_data = array(
+				'name'  => $customerSession->getCustomer()->getName(),
+				'email' => $customerSession->getCustomer()->getEmail()
+			);
+			return json_encode($user_data);
+		}
+		return NULL;
+	}
+
 	protected function _toHtml()
 	{
 		if(is_null($this->model)) {
@@ -75,11 +88,10 @@ class Embed extends Template
 
 		$alwaysdisplay = $this->model->getAlwaysDisplay();
 		$donotdisplay = $this->model->getDoNotDisplay();
+
 		$display = true;
 
 		if($alwaysdisplay == 1){
-			$display = true;
-			
 			$excluded_url_list = $this->model->getExcludeUrl();
 
 			if(strlen( $excluded_url_list ) > 0 )
@@ -94,7 +106,6 @@ class Embed extends Template
 			    $current_url = $protocol.'://'.$current_url;
 			    $current_url = strtolower($current_url);
 
-			    #$exclude_url = trim( strtolower( $this->model->getExcludeUrl() ) );
 			    $current_url = trim( strtolower( $current_url ) );
 				
 				
@@ -116,7 +127,6 @@ class Embed extends Template
 
 		if($donotdisplay == 1){
 			$display = false;
-
 			$included_url_list = $this->model->getIncludeUrl();
 			if(strlen( $included_url_list ) > 0 )
 			{
@@ -143,8 +153,7 @@ class Embed extends Template
 				}
 			}
 		}
-		
-		if($display == true){		
+		if($display == true){
 			return parent::_toHtml();
 		}else{
 			return '';

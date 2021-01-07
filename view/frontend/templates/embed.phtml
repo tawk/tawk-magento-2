@@ -18,7 +18,14 @@
 ?>
 
 <!--Start of Tawk.to Script-->
-<script type="text/javascript"> var $_Tawk_API={},$_Tawk_LoadStart=new Date();
+<script type="text/javascript"> var Tawk_API={};
+<?php
+$customer_details = $this->getCurrentCustomerDetails();
+if(!is_null($customer_details)) {
+	echo 'Tawk_API.visitor = '. $customer_details.';';
+}
+?>
+var Tawk_LoadStart=new Date();
 (function(){
 	var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
 	s1.async=true;
