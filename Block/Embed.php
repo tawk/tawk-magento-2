@@ -20,6 +20,7 @@ namespace Tawk\Widget\Block;
 
 use Magento\Framework\View\Element\Template;
 use Tawk\Widget\Model\WidgetFactory;
+use Magento\Customer\Model\SessionFactory;
 
 class Embed extends Template
 {
@@ -28,14 +29,16 @@ class Embed extends Template
 	protected $logger;
 	protected $model;
 	protected $storeManager;
+	protected $modelSesionFactory;
 
-	public function __construct(WidgetFactory $modelFactory, Template\Context $context, array $data = [])
+	public function __construct(SessionFactory $sessionFactory, WidgetFactory $modelFactory, Template\Context $context, array $data = [])
 	{
 		parent::__construct($context, $data);
 		$this->modelWidgetFactory = $modelFactory;
 		$this->storeManager       = $context->getStoreManager();
 		$this->logger             = $context->getLogger();
 		$this->model              = $this->getWidgetModel();
+		$this->modelSesionFactory = $sessionFactory;
 	}
 
 	public function getEmbedUrl()
@@ -68,8 +71,7 @@ class Embed extends Template
 	}
 
 	public function getCurrentCustomerDetails(){
-		$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-		$customerSession = $objectManager->create('Magento\Customer\Model\Session');
+		$customerSession = $this->modelSesionFactory->create();
 		if($customerSession->isLoggedIn()) {
 			$user_data = array(
 				'name'  => $customerSession->getCustomer()->getName(),
@@ -100,21 +102,21 @@ class Embed extends Template
 				$current_url = urldecode($current_url);
 
 				$ssl      = ( ! empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] == 'on' );
-			    $sp       = strtolower( $_SERVER['SERVER_PROTOCOL'] );
-			    $protocol = substr( $sp, 0, strpos( $sp, '/' ) ) . ( ( $ssl ) ? 's' : '' );
+				$sp       = strtolower( $_SERVER['SERVER_PROTOCOL'] );
+				$protocol = substr( $sp, 0, strpos( $sp, '/' ) ) . ( ( $ssl ) ? 's' : '' );
 
-			    $current_url = $protocol.'://'.$current_url;
-			    $current_url = strtolower($current_url);
+				$current_url = $protocol.'://'.$current_url;
+				$current_url = strtolower($current_url);
 
-			    $current_url = trim( strtolower( $current_url ) );
-				
-				
+				$current_url = trim( strtolower( $current_url ) );
+
+
 				$excluded_url_list = preg_split("/,/", $excluded_url_list);
 
 				foreach($excluded_url_list as $exclude_url)
 				{
-			    	$exclude_url = strtolower(urldecode(trim($exclude_url)));
-			    	if (strpos($current_url, $exclude_url) !== false) 
+					$exclude_url = strtolower(urldecode(trim($exclude_url)));
+					if (strpos($current_url, $exclude_url) !== false)
 					{
 						$display = false;
 					}
@@ -134,19 +136,19 @@ class Embed extends Template
 				$current_url = urldecode($current_url);
 
 				$ssl      = ( ! empty( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] == 'on' );
-			    $sp       = strtolower( $_SERVER['SERVER_PROTOCOL'] );
-			    $protocol = substr( $sp, 0, strpos( $sp, '/' ) ) . ( ( $ssl ) ? 's' : '' );
+				$sp       = strtolower( $_SERVER['SERVER_PROTOCOL'] );
+				$protocol = substr( $sp, 0, strpos( $sp, '/' ) ) . ( ( $ssl ) ? 's' : '' );
 
-			    $current_url = $protocol.'://'.$current_url;
-			    $current_url = strtolower($current_url);
+				$current_url = $protocol.'://'.$current_url;
+				$current_url = strtolower($current_url);
 
-			    $current_url = trim( strtolower( $current_url ) );
+				$current_url = trim( strtolower( $current_url ) );
 
 				$included_url_list = preg_split("/,/", $included_url_list);
 				foreach($included_url_list as $include_url)
 				{
-			    	$exclude_url = strtolower(urldecode(trim($include_url)));
-			    	if (strpos($current_url, $include_url) !== false) 
+					$exclude_url = strtolower(urldecode(trim($include_url)));
+					if (strpos($current_url, $include_url) !== false)
 					{
 						$display = true;
 					}
