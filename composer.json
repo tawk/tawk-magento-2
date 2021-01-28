@@ -1,7 +1,21 @@
 {
   "name": "tawk/widget",
-  "description": "Tawk live chat widget",
+  "description": "tawk.to - free live chat software for your website",
   "type": "magento2-module",
+  "keywords": [
+    "magento 2",
+    "live chat",
+    "messaging",
+    "b2c communication tool",
+    "support tool",
+    "helpdesk",
+    "agents"
+  ],
+  "homepage": "https://www.tawk.to/",
+  "support": {
+    "email": "support@tawk.to",
+    "issues": "https://github.com/tawk/tawk-magento-2/issues"
+  },
   "version": "1.4.1",
   "license": [
     "OSL-3.0"
