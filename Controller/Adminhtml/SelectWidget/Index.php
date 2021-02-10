@@ -27,10 +27,11 @@ class Index extends \Magento\Backend\App\Action
     
     protected function _isAllowed()
     {
-    	return $this->_authorization->isAllowed('Tawk_Widget::tawk_choose_widget');
+        return $this->_authorization->isAllowed('Tawk_Widget::tawk_choose_widget');
     }
 
-    public function __construct(Context $context, PageFactory $resultPageFactory) {
+    public function __construct(Context $context, PageFactory $resultPageFactory)
+    {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
     }

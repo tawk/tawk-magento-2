@@ -24,76 +24,67 @@ use Tawk\Widget\Model\WidgetFactory;
 class SelectWidgetBlock extends Template
 {
     const BASE_URL = 'https://plugins.tawk.to';
-    protected $logger; 
+    protected $logger;
     protected $modelWidgetFactory;
+    protected $request;
 
-    public function __construct(Template\Context $context, WidgetFactory $modelFactory, array $data = []) 
+    public function __construct(Template\Context $context, WidgetFactory $modelFactory, array $data = [])
     {
         parent::__construct($context, $data);
         $this->logger  = $context->getLogger();
         $this->modelWidgetFactory = $modelFactory;
+        $this->request = $context->getRequest();
     }
 
-    function mainurl(){
-        if(isset($_SERVER['HTTPS'])){
-            $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
-        }
-        else{
+    public function mainurl()
+    {
+        $httpsServer = $this->request->getServer('HTTPS');
+        if (isset($httpsServer) && $httpsServer != 'off') {
+            $protocol = "https";
+        } else {
             $protocol = 'http';
         }
-        return $protocol . "://" . $_SERVER['HTTP_HOST'];
+        return $protocol . "://" . $this->request->getServer('HTTP_HOST');
     }
-    
-    public function getWebSiteoptions(){
+
+    public function getWebSiteoptions()
+    {
         $sdstr = '';
 
         $websites = $this->_storeManager->getWebsites();
-        #$sdstr .= '<option value="0">Select Store</option>';
         foreach ($websites as $website) {
             $sdstr .= '<option value="'.$website->getId().'">'.$website->getName().'</option>';
         }
         return $sdstr;
     }
 
-    public function _prepareLayout()
-    {
-        return parent::_prepareLayout();
-    }
-
     public function getIframeUrl()
     {
-        /*
-        return $this->getBaseUrl()
-            .'/generic/widgets'
-            .'?parentDomain='.$this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB)
-            .'&selectType=singleIdSelect'
-            .'&selectText=Store';
-        */
-        
         return $this->getBaseUrl().'/generic/widgets'
-                .'?currentWidgetId=&currentPageId=&transparentBackground=1'
-                .'&parentDomain='.$this->mainurl();
-
+            .'?currentWidgetId=&currentPageId=&transparentBackground=1'
+            .'&parentDomain='.$this->mainurl();
     }
 
-    public function getBaseUrl() {
+    public function getBaseUrl()
+    {
         return self::BASE_URL;
     }
 
-    public function getHierarchy() {
+    public function getHierarchy()
+    {
         $websites = $this->_storeManager->getWebsites();
 
-        $h = array();
+        $h = [];
 
-        $h[] = array(
+        $h[] = [
             'id'      => 'global',
             'name'    => 'Global',
-            'childs'  => array(),
+            'childs'  => [],
             'current' => $this->getCurrentValuesFor('global')
-        );
+        ];
 
         foreach ($websites as $website) {
-            $parsed = array();
+            $parsed = [];
 
             $parsed['id']      = $website->getId();
             $parsed['name']    = $website->getName();
@@ -106,27 +97,32 @@ class SelectWidgetBlock extends Template
         return $h;
     }
 
-    public function getCollection(){
+    public function getCollection()
+    {
         return $this->modelWidgetFactory->create()->getCollection();
     }
 
-    public function getFormAction() {
+    public function getFormAction()
+    {
         return $this->getUrl('widget/savewidget', ['_secure' => true]);
     }
 
-    public function getRemoveUrl() {
+    public function getRemoveUrl()
+    {
         return $this->getUrl('widget/removewidget', ['_secure' => true]);
     }
 
-    public function getStoreWidget(){
+    public function getStoreWidget()
+    {
         return $this->getUrl('widget/storewidget', ['_secure' => true]);
     }
 
-    private function parseGroups($groups) {
-        $return = array();
+    private function parseGroups($groups)
+    {
+        $return = [];
 
         foreach ($groups as $group) {
-            $parsed = array();
+            $parsed = [];
 
             $parsed['id']      = $group->getWebsiteId().'_'.$group->getId();
             $parsed['name']    = $group->getName();
@@ -139,15 +135,16 @@ class SelectWidgetBlock extends Template
         return $return;
     }
 
-    private function parseStores($stores) {
-        $return = array();
+    private function parseStores($stores)
+    {
+        $return = [];
 
         foreach ($stores as $store) {
-            $parsed = array();
+            $parsed = [];
 
             $parsed['id']      = $store->getWebsiteId().'_'.$store->getGroupId().'_'.$store->getId();
             $parsed['name']    = $store->getName();
-            $parsed['childs']  = array();
+            $parsed['childs']  = [];
             $parsed['current'] = $this->getCurrentValuesFor($parsed['id']);
 
             $return[] = $parsed;
@@ -156,18 +153,19 @@ class SelectWidgetBlock extends Template
         return $return;
     }
 
-    private function getCurrentValuesFor($id) {
+    private function getCurrentValuesFor($id)
+    {
         $widgets = $this->getCollection();
 
         foreach ($widgets as $widget) {
-            if($widget->getForStoreId() === $id) {
-                return array(
+            if ($widget->getForStoreId() === $id) {
+                return [
                     'pageId'   => $widget->getPageId(),
                     'widgetId' => $widget->getWidgetId()
-                );
+                ];
             }
         }
 
-        return array();
+        return [];
     }
 }

@@ -22,7 +22,8 @@ use \Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 class Widget extends AbstractDb
 {
-    protected function _construct() {
+    protected function _construct()
+    {
         $this->_init('tawk_widget', 'id');
     }
 }

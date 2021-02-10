@@ -19,9 +19,9 @@
  <style>
 
 .websiteids:focus{
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
-	border-color: #66afe9;
-	outline:0 none;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+    border-color: #66afe9;
+    outline:0 none;
 
 }
 .websiteids {
@@ -48,7 +48,7 @@
 }
 
 .tawk_fields{
-	margin:15px 0;
+    margin:15px 0;
 }
 
 .switch {
@@ -110,7 +110,7 @@ input:checked + .slider:before {
 }
 
 .savesettingsbtn{
-	background-color: #5cb85c;
+    background-color: #5cb85c;
     border-color: #4cae4c;
     color: #fff;
    -moz-user-select: none;
@@ -131,214 +131,197 @@ input:checked + .slider:before {
 }
 
 .savesettingsbtn:hover{
-	text-decoration: none;
-	color: #fff;
+    text-decoration: none;
+    color: #fff;
 }
 </style>
 <script type="text/javascript">
-    require(['jquery', 'jquery/ui'], function($){
-	    $.noConflict();
-	    jQuery(function() {
+    var baseUrl = '<?= $block->escapeUrl($block->getBaseUrl()) ?>';
+    require(['jquery', 'jquery/ui'], function($) {
+        $.noConflict();
+        jQuery(function() {
+            displayWidget(jQuery('#websiteids').val());
 
-			jQuery.get('<?php echo $this->getStoreWidget() ?>?id=' + jQuery( "#websiteids" ).val(), function (response) {
-				var src = 'https://plugins.tawk.to/generic/widgets?'
-				if (response.widgetid) {
-					src = src + '&currentWidgetId=' + response.widgetid;
-				}
-				if (response.pageid) {
-					src = src + '&currentPageId=' + response.pageid;
-				}
-				src = src + '&transparentBackground=1&parentDomain=<?php echo $this->mainurl() ?>';
-				document.getElementById('tawk_widget_customization').src = src;
+            if (jQuery("#alwaysdisplay").prop("checked")) {
+                jQuery("#exlucded_urls_container").show();
+            } else {
+                jQuery("#exlucded_urls_container").hide();
+            }
 
-				jQuery('#excludeurl').val(response.excludeurl);
-				jQuery('#includeurl').val(response.includeurl);
-				if(response.alwaysdisplay == 1){
-					jQuery('#alwaysdisplay').prop('checked', true);
-					jQuery("#exlucded_urls_container").show();
-				}else{
-					jQuery('#alwaysdisplay').prop('checked', false);
-					jQuery("#exlucded_urls_container").hide();
-				}
-				if(response.donotdisplay == 1){
-					jQuery('#donotdisplay').prop('checked', true);
-					jQuery("#included_urls_container").show();
-				}else{
-					jQuery('#donotdisplay').prop('checked', false);
-					jQuery("#included_urls_container").hide();
-				}
+            if (jQuery("#donotdisplay").prop("checked")) {
+                jQuery("#included_urls_container").show();
+            } else {
+                jQuery("#included_urls_container").hide();
+            }
 
-			});
+            window.addEventListener('message', function(e) {
+                if(e.origin === baseUrl) {
+                    if(e.data.action === 'setWidget') {
+                        setWidget(e);
+                    }
+                    if(e.data.action === 'removeWidget') {
+                        removeWidget(e);
+                    }
+                }
+            });
 
+            function setWidget(e) {
+                alwaysdisplay = jQuery('#alwaysdisplay').is(":checked");
+                var alwaysdisplayvalue = alwaysdisplay ? 1 : 0;
 
-	        if(jQuery("#alwaysdisplay").prop("checked")){
-				jQuery("#exlucded_urls_container").show();
-			}else{
-				jQuery("#exlucded_urls_container").hide();
-			}
+                donotdisplay = jQuery('#donotdisplay').is(":checked");
+                var donotdisplayvalue = donotdisplay ? 1 : 0;
 
-			if(jQuery("#donotdisplay").prop("checked")){
-				jQuery("#included_urls_container").show();
-			}else{
-				jQuery("#included_urls_container").hide();
-			}
+                jQuery.post('<?= $block->escapeUrl($block->getFormAction()) ?>', {
+                    pageId   : e.data.pageId,
+                    widgetId : e.data.widgetId,
+                    id       : jQuery('#websiteids').val(),
+                    excludeurl : jQuery('#excludeurl').val(),
+                    includeurl : jQuery('#includeurl').val(),
+                    alwaysdisplay : alwaysdisplayvalue,
+                    donotdisplay: donotdisplayvalue,
+                    form_key : '<?= $block->escapeJs($block->getFormKey()) ?>'
+                }, function(response) {
+                    e.source.postMessage({action : 'setDone'}, baseUrl);
+                });
+            }
 
-			window.addEventListener('message', function(e) {
-	            if(e.origin === '<?php echo $this->getBaseUrl() ?>') {
-	                if(e.data.action === 'setWidget') {
-	                    setWidget(e);
-	                }
-	                if(e.data.action === 'removeWidget') {
-	                    removeWidget(e);
-	                }
-	            }
-	        });
+            function removeWidget(e) {
+                var removeWidgetUrl = '<?= $block->escapeUrl($block->getRemoveUrl()) ?>';
+                jQuery.get(removeWidgetUrl + '?id=' + jQuery( "#websiteids" ).val(), function (response) {
+                    e.source.postMessage({action : 'removeDone'}, baseUrl);
+                });
+            }
 
-	        function setWidget(e) {
-	        	alwaysdisplay = jQuery('#alwaysdisplay').is(":checked");
-				var alwaysdisplayvalue = alwaysdisplay ? 1 : 0;
+            jQuery(".savesettingsbtn" ).click(function(e) {
+                e.preventDefault();
+                alwaysdisplay = jQuery('#alwaysdisplay').is(":checked");
+                var alwaysdisplayvalue = alwaysdisplay ? 1 : 0;
 
-				donotdisplay = jQuery('#donotdisplay').is(":checked");
-				var donotdisplayvalue = donotdisplay ? 1 : 0;
+                donotdisplay = jQuery('#donotdisplay').is(":checked");
+                var donotdisplayvalue = donotdisplay ? 1 : 0;
 
-	            jQuery.post('<?php echo $this->getFormAction() ?>', {
-	                pageId   : e.data.pageId,
-	                widgetId : e.data.widgetId,
-	                id       : jQuery('#websiteids').val(),
-	            	excludeurl : jQuery('#excludeurl').val(),
-					includeurl : jQuery('#includeurl').val(),
-					alwaysdisplay : alwaysdisplayvalue,
-					donotdisplay: donotdisplayvalue,
-	                form_key : '<?php echo $this->getFormKey() ?>'
-	            }, function(response) {
-	                e.source.postMessage({action : 'setDone'}, '<?php echo $this->getBaseUrl() ?>');
-	            });
-	        }
+                jQuery.post('<?= $block->escapeUrl($block->getFormAction()) ?>', {
+                    pageId     : "-1",
+                    widgetId   : "-1",
+                    id         : jQuery('#websiteids').val(),
+                    excludeurl : jQuery('#excludeurl').val(),
+                    includeurl : jQuery('#includeurl').val(),
+                    alwaysdisplay : alwaysdisplayvalue,
+                    donotdisplay: donotdisplayvalue,
+                    form_key : '<?= $block->escapeJs($block->getFormKey()) ?>'
+                }, function() {
+                    alert('Visibility options Saved');
+                });
+            });
 
-	        function removeWidget(e) {
-	            jQuery.get('<?php echo $this->getRemoveUrl() ?>?id=' + jQuery( "#websiteids" ).val(), function (response) {
-	                e.source.postMessage({action : 'removeDone'}, '<?php echo $this->getBaseUrl() ?>');
-	            });
-	        }
+            jQuery('#websiteids').on('change', function() {
+                if (this.value == 0) {
+                    document.getElementById('tawk_widget_customization').src = "";
+                    jQuery("#visibility_options").hide();
+                } else {
+                    displayWidget(this.value)
+                    jQuery("#visibility_options").show();
+                }
+            });
 
-	        jQuery(".savesettingsbtn" ).click(function(e) {
-				e.preventDefault();
-				alwaysdisplay = jQuery('#alwaysdisplay').is(":checked");
-				var alwaysdisplayvalue = alwaysdisplay ? 1 : 0;
+            jQuery("#alwaysdisplay").change(function() {
+                if(this.checked){
+                    jQuery("#exlucded_urls_container").show();
+                    jQuery('#donotdisplay').prop('checked', false);
+                    jQuery("#included_urls_container").hide();
+                }else{
+                    jQuery("#exlucded_urls_container").hide();
+                    jQuery('#donotdisplay').prop('checked', true);
+                    jQuery("#included_urls_container").show();
+                }
+            });
 
-				donotdisplay = jQuery('#donotdisplay').is(":checked");
-				var donotdisplayvalue = donotdisplay ? 1 : 0;
+            jQuery("#donotdisplay").change(function() {
+                if(this.checked){
+                    jQuery("#included_urls_container").show();
+                    jQuery('#alwaysdisplay').prop('checked', false);
+                    jQuery("#exlucded_urls_container").hide();
+                }else{
+                    jQuery("#included_urls_container").hide();
+                    jQuery('#alwaysdisplay').prop('checked', true);
+                    jQuery("#exlucded_urls_container").show();
+                }
+            });
+        });
 
-				jQuery.post('<?php echo $this->getFormAction() ?>', {
-					pageId     : "-1",
-					widgetId   : "-1",
-					id         : jQuery('#websiteids').val(),
-					excludeurl : jQuery('#excludeurl').val(),
-					includeurl : jQuery('#includeurl').val(),
-					alwaysdisplay : alwaysdisplayvalue,
-					donotdisplay: donotdisplayvalue,
-					form_key : '<?php echo $this->getFormKey() ?>'
-				}, function() {
-					alert('Visibility options Saved');
-				});
-			});
+        function displayWidget (websiteId) {
+            var storedWidgetUrl = '<?= $block->escapeUrl($block->getStoreWidget()) ?>';
+            var domain = '<?= $block->escapeUrl($block->mainurl()) ?>';
+            jQuery.get(storedWidgetUrl + '?id=' + websiteId, function (response) {
+                var src = baseUrl + '/generic/widgets?';
+                if (response.widgetid) {
+                    src = src + '&currentWidgetId=' + response.widgetid;
+                }
+                if (response.pageid) {
+                    src = src + '&currentPageId=' + response.pageid;
+                }
+                src = src + '&transparentBackground=1&parentDomain=' + domain;
+                document.getElementById('tawk_widget_customization').src = src;
 
-	        jQuery('#websiteids').on('change', function() {
-	          if(this.value == 0){
-	          	document.getElementById('tawk_widget_customization').src = "";
-	          	jQuery("#visibility_options").hide();
-	          }else{
-				  jQuery.get('<?php echo $this->getStoreWidget() ?>?id=' + this.value, function (response) {
-					   document.getElementById('tawk_widget_customization').src = 'https://plugins.tawk.to/generic/widgets?currentWidgetId=' + response.widgetid + '&currentPageId='+ response.pageid +'&transparentBackground=1&parentDomain=<?php echo $this->mainurl() ?>';
-						jQuery("#visibility_options").show();
-				  });
+                jQuery('#excludeurl').val(response.excludeurl);
+                jQuery('#includeurl').val(response.includeurl);
+                if (response.alwaysdisplay == 1) {
+                    jQuery('#alwaysdisplay').prop('checked', true);
+                    jQuery("#exlucded_urls_container").show();
+                } else {
+                    jQuery('#alwaysdisplay').prop('checked', false);
+                    jQuery("#exlucded_urls_container").hide();
+                }
 
-				 	jQuery('#excludeurl').val(response.excludeurl);
-					jQuery('#includeurl').val(response.includeurl);
-					if(response.alwaysdisplay == 1){
-						jQuery('#alwaysdisplay').prop('checked', true);
-						jQuery("#exlucded_urls_container").show();
-					}else{
-						jQuery('#alwaysdisplay').prop('checked', false);
-						jQuery("#exlucded_urls_container").hide();
-					}
-					if(response.donotdisplay == 1){
-						jQuery('#donotdisplay').prop('checked', true);
-						jQuery("#included_urls_container").show();
-					}else{
-						jQuery('#donotdisplay').prop('checked', false);
-						jQuery("#included_urls_container").hide();
-					}
-
-			  }
-			});
-
-			jQuery("#alwaysdisplay").change(function() {
-				if(this.checked){
-					jQuery("#exlucded_urls_container").show();
-					jQuery('#donotdisplay').prop('checked', false);
-					jQuery("#included_urls_container").hide();
-				}else{
-					jQuery("#exlucded_urls_container").hide();
-					jQuery('#donotdisplay').prop('checked', true);
-					jQuery("#included_urls_container").show();
-				}
-			});
-
-			jQuery("#donotdisplay").change(function() {
-				if(this.checked){
-					jQuery("#included_urls_container").show();
-					jQuery('#alwaysdisplay').prop('checked', false);
-					jQuery("#exlucded_urls_container").hide();
-				}else{
-					jQuery("#included_urls_container").hide();
-					jQuery('#alwaysdisplay').prop('checked', true);
-					jQuery("#exlucded_urls_container").show();
-				}
-			});
-
-
-
-	    });
- 	});
+                if (response.donotdisplay == 1) {
+                    jQuery('#donotdisplay').prop('checked', true);
+                    jQuery("#included_urls_container").show();
+                } else {
+                    jQuery('#donotdisplay').prop('checked', false);
+                    jQuery("#included_urls_container").hide();
+                }
+            });
+        }
+     });
 </script>
 
 <label for="websiteids" class="websiteids_label">Select Store</label>
 <select name="websiteids" id="websiteids" class="websiteids">
-<?php echo $this->getWebSiteoptions(); ?>
+<?= /* @noEscape */ $block->getWebSiteoptions(); ?>
 </select>
 
 <iframe
     id="tawk_widget_customization"
     style="border:none; width:100%; margin: 0 0 0 0; padding: 0 0 0 0; min-height: 300px"
-    src="<?php echo $this->getIframeUrl() ?>">
+    src="<?= $block->escapeUrl($block->getIframeUrl()) ?>">
 </iframe>
 
 <div id="visibility_options">
 <h3>Visibility Options</h3>
 <div class="tawk_fields">
-	<label for="alwaysdisplay" class="websiteids_label">Always Display widget</label>
-	<label class="switch">
-	  <input type="checkbox" id= "alwaysdisplay" name="alwaysdisplay"  class="tawk_check">
-	  <div class="slider round"></div>
-	</label>
+    <label for="alwaysdisplay" class="websiteids_label">Always Display widget</label>
+    <label class="switch">
+      <input type="checkbox" id= "alwaysdisplay" name="alwaysdisplay"  class="tawk_check">
+      <div class="slider round"></div>
+    </label>
 </div>
 <div class="tawk_fields" id="exlucded_urls_container">
-	<label for="excludeurl">(Exception) hide tawk.to widget to the following URL</label>
-	<BR />
-	<textarea name="excludeurl" id="excludeurl" rows="10" style="width:80%;" ></textarea>
+    <label for="excludeurl">(Exception) hide tawk.to widget to the following URL</label>
+    <BR />
+    <textarea name="excludeurl" id="excludeurl" rows="10" style="width:80%;" ></textarea>
 </div>
 <div class="tawk_fields">
-	<label for="donotdisplay" class="websiteids_label">Do not Display widget</label>
-	<label class="switch">
-	  <input type="checkbox" value="0" id= "donotdisplay" name="donotdisplay"  class="tawk_check">
-	  <div class="slider round"></div>
-	</label>
+    <label for="donotdisplay" class="websiteids_label">Do not Display widget</label>
+    <label class="switch">
+      <input type="checkbox" value="0" id= "donotdisplay" name="donotdisplay"  class="tawk_check">
+      <div class="slider round"></div>
+    </label>
 </div>
 <div class="tawk_fields"  id="included_urls_container">
-	<label for="includeurl">(Exception) display tawk.to widget to the following URL</label>
-	<BR />
-	<textarea name="includeurl" id="includeurl" rows="10" style="width:80%;" ></textarea>
+    <label for="includeurl">(Exception) display tawk.to widget to the following URL</label>
+    <BR />
+    <textarea name="includeurl" id="includeurl" rows="10" style="width:80%;" ></textarea>
 </div>
 <div class="tawk_fields">
 <a class="savesettingsbtn" href="#">Save Visibility Settings</a>

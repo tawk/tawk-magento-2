@@ -18,20 +18,29 @@
 
 namespace Tawk\Widget\Controller\Adminhtml\StoreWidget;
 
-use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\JsonFactory;
 use Psr\Log\LoggerInterface;
+use Tawk\Widget\Model\WidgetFactory;
 
 class Index extends \Magento\Backend\App\Action
 {
     protected $resultJsonFactory;
     protected $logger;
+    protected $modelWidgetFactory;
+    protected $request;
 
-    public function __construct(Context $context, JsonFactory $resultJsonFactory, LoggerInterface $logger)
-    {
+    public function __construct(
+        WidgetFactory $modelWidgetFactory,
+        Context $context,
+        JsonFactory $resultJsonFactory,
+        LoggerInterface $logger
+    ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->logger = $logger;
+        $this->modelWidgetFactory = $modelWidgetFactory->create();
+        $this->request = $this->getRequest();
     }
 
     public function execute()
@@ -39,16 +48,19 @@ class Index extends \Magento\Backend\App\Action
         $response = $this->resultJsonFactory->create();
         $response->setHeader('Content-type', 'application/json');
 
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $model = $objectManager->get('Tawk\Widget\Model\Widget')->loadByForStoreId(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_STRING));
+        $storeId = filter_var($this->request->getParam('id'), FILTER_SANITIZE_STRING);
+        if (!$storeId) {
+            return $response->setData(['success' => false]);
+        }
 
-        if(!$model->hasId()) {
-            $model = $objectManager->get('Tawk\Widget\Model\Widget');
+        $model = $this->modelWidgetFactory->loadByForStoreId($storeId);
+
+        if (!$model->hasId()) {
+            $model = $this->modelWidgetFactory;
         }
 
         $pageId = $model->getPageId();
         $widgetId =  $model->getWidgetId();
-
 
         $alwaysdisplay = $model->getAlwaysDisplay();
         $excludeurl = $model->getExcludeUrl();
@@ -56,6 +68,14 @@ class Index extends \Magento\Backend\App\Action
         $donotdisplay = $model->getDoNotDisplay();
         $includeurl = $model->getIncludeUrl();
 
-        return $response->setData(['success' => TRUE,'pageid' => $pageId,'widgetid' => $widgetId,'alwaysdisplay' => $alwaysdisplay,'excludeurl' => $excludeurl,'donotdisplay' => $donotdisplay,'includeurl' => $includeurl]);
+        return $response->setData([
+            'success' => true,
+            'pageid' => $pageId,
+            'widgetid' => $widgetId,
+            'alwaysdisplay' => $alwaysdisplay,
+            'excludeurl' => $excludeurl,
+            'donotdisplay' => $donotdisplay,
+            'includeurl' => $includeurl
+        ]);
     }
 }
