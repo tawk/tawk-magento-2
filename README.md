@@ -14,7 +14,7 @@ Don’t have a tawk.to account yet? [Create one here.](https://tawk.to/?utm_sour
 
 ## Installation
 ### Manual Installation
-1. Download the extension (installation files here)[https://github.com/tawk/tawk-magento-2/archive/master.zip].
+1. Download the extension [installation files here](https://github.com/tawk/tawk-magento-2/archive/master.zip).
 2. Extract the tawk-magento-2-master folder from the package
 3. Copy the contents of tawk-magento-2-master folder to <magento-installation-root-folder>/app/code/Tawk/Widget folder of your website (create a new folder if necessary)
 
