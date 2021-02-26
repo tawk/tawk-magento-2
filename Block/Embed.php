@@ -76,6 +76,10 @@ class Embed extends Template
 
     public function getCurrentCustomerDetails()
     {
+        if ($this->model->getEnableVisitorRecognition() != 1) {
+            return null;
+        }
+
         if (!$this->modelSessionFactory->isLoggedIn()) {
             return null;
         }

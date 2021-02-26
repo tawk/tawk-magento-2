@@ -180,6 +180,7 @@ input:checked + .slider:before {
                     includeurl : jQuery('#includeurl').val(),
                     alwaysdisplay : alwaysdisplayvalue,
                     donotdisplay: donotdisplayvalue,
+                    enableVisitorRecognition : jQuery('#enable_visitor_recognition').is(":checked") ? 1 : 0,
                     form_key : '<?= $block->escapeJs($block->getFormKey()) ?>'
                 }, function(response) {
                     e.source.postMessage({action : 'setDone'}, baseUrl);
@@ -209,6 +210,7 @@ input:checked + .slider:before {
                     includeurl : jQuery('#includeurl').val(),
                     alwaysdisplay : alwaysdisplayvalue,
                     donotdisplay: donotdisplayvalue,
+                    enableVisitorRecognition : jQuery('#enable_visitor_recognition').is(":checked") ? 1 : 0,
                     form_key : '<?= $block->escapeJs($block->getFormKey()) ?>'
                 }, function() {
                     alert('Visibility options Saved');
@@ -281,6 +283,8 @@ input:checked + .slider:before {
                     jQuery('#donotdisplay').prop('checked', false);
                     jQuery("#included_urls_container").hide();
                 }
+
+                jQuery('#enable_visitor_recognition').prop('checked', response.enableVisitorRecognition == 1)
             });
         }
      });
@@ -298,32 +302,49 @@ input:checked + .slider:before {
 </iframe>
 
 <div id="visibility_options">
-<h3>Visibility Options</h3>
-<div class="tawk_fields">
-    <label for="alwaysdisplay" class="websiteids_label">Always Display widget</label>
-    <label class="switch">
-      <input type="checkbox" id= "alwaysdisplay" name="alwaysdisplay"  class="tawk_check">
-      <div class="slider round"></div>
-    </label>
-</div>
-<div class="tawk_fields" id="exlucded_urls_container">
-    <label for="excludeurl">(Exception) hide tawk.to widget to the following URL</label>
+    <div id="visibility">
+        <h3>Visibility Options</h3>
+        <div class="tawk_fields">
+            <label for="alwaysdisplay" class="websiteids_label">Always Display widget</label>
+            <label class="switch">
+            <input type="checkbox" id= "alwaysdisplay" name="alwaysdisplay"  class="tawk_check">
+            <div class="slider round"></div>
+            </label>
+        </div>
+        <div class="tawk_fields" id="exlucded_urls_container">
+            <label for="excludeurl">(Exception) hide tawk.to widget to the following URL</label>
+            <BR />
+            <textarea name="excludeurl" id="excludeurl" rows="10" style="width:80%;" ></textarea>
+        </div>
+        <div class="tawk_fields">
+            <label for="donotdisplay" class="websiteids_label">Do not Display widget</label>
+            <label class="switch">
+            <input type="checkbox" value="0" id= "donotdisplay" name="donotdisplay"  class="tawk_check">
+            <div class="slider round"></div>
+            </label>
+        </div>
+        <div class="tawk_fields"  id="included_urls_container">
+            <label for="includeurl">(Exception) display tawk.to widget to the following URL</label>
+            <BR />
+            <textarea name="includeurl" id="includeurl" rows="10" style="width:80%;" ></textarea>
+        </div>
+    </div>
+
     <BR />
-    <textarea name="excludeurl" id="excludeurl" rows="10" style="width:80%;" ></textarea>
-</div>
-<div class="tawk_fields">
-    <label for="donotdisplay" class="websiteids_label">Do not Display widget</label>
-    <label class="switch">
-      <input type="checkbox" value="0" id= "donotdisplay" name="donotdisplay"  class="tawk_check">
-      <div class="slider round"></div>
-    </label>
-</div>
-<div class="tawk_fields"  id="included_urls_container">
-    <label for="includeurl">(Exception) display tawk.to widget to the following URL</label>
-    <BR />
-    <textarea name="includeurl" id="includeurl" rows="10" style="width:80%;" ></textarea>
-</div>
-<div class="tawk_fields">
-<a class="savesettingsbtn" href="#">Save Visibility Settings</a>
-</div>
+
+    <div id="privacy" style>
+        <h3>Privacy Options</h3>
+        <div class="tawk_fields">
+            <label for="enable_visitor_recognition" class="websiteids_label">Enable Visitor Recognition</label>
+            <label class="switch">
+                <input type="checkbox" id="enable_visitor_recognition"
+                    name="enable_visitor_recognition" class="tawk_check">
+                <div class="slider round"></div>
+            </label>
+        </div>
+    </div>
+
+    <div class="tawk_fields">
+        <a class="savesettingsbtn" href="#">Save Settings</a>
+    </div>
 </div>

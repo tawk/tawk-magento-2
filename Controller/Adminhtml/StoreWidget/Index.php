@@ -68,6 +68,8 @@ class Index extends \Magento\Backend\App\Action
         $donotdisplay = $model->getDoNotDisplay();
         $includeurl = $model->getIncludeUrl();
 
+        $enableVisitorRecognition = $model->getEnableVisitorRecognition();
+
         return $response->setData([
             'success' => true,
             'pageid' => $pageId,
@@ -75,7 +77,8 @@ class Index extends \Magento\Backend\App\Action
             'alwaysdisplay' => $alwaysdisplay,
             'excludeurl' => $excludeurl,
             'donotdisplay' => $donotdisplay,
-            'includeurl' => $includeurl
+            'includeurl' => $includeurl,
+            'enableVisitorRecognition' => $enableVisitorRecognition
         ]);
     }
 }

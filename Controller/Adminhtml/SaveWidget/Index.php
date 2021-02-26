@@ -60,6 +60,10 @@ class Index extends \Magento\Backend\App\Action
         $excludeurl = filter_var($this->request->getParam('excludeurl'), FILTER_SANITIZE_STRING);
         $donotdisplay = filter_var($this->request->getParam('donotdisplay'), FILTER_SANITIZE_NUMBER_INT);
         $includeurl = filter_var($this->request->getParam('includeurl'), FILTER_SANITIZE_STRING);
+        $enableVisitorRecognition = filter_var(
+            $this->request->getParam('enableVisitorRecognition'),
+            FILTER_SANITIZE_STRING
+        );
 
         $model = $this->modelWidgetFactory->loadByForStoreId($storeId);
 
@@ -78,6 +82,8 @@ class Index extends \Magento\Backend\App\Action
 
         $model->setDoNotDisplay($donotdisplay);
         $model->setIncludeUrl($includeurl);
+
+        $model->setEnableVisitorRecognition($enableVisitorRecognition);
 
         $model->save();
 
