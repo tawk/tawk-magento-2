@@ -18,7 +18,18 @@
 ?>
 
 <!--Start of Tawk.to Script-->
-<script type="text/javascript"> var $_Tawk_API={},$_Tawk_LoadStart=new Date();
+<script type="text/javascript">
+var Tawk_API={};
+
+<?php $customer_details = $block->getCurrentCustomerDetails(); ?>
+<?php if ($customer_details !== null): ?>
+    Tawk_API.visitor = {
+        name : '<?= $block->escapeJs($customer_details['name']); ?>',
+        email : '<?= $block->escapeJs($customer_details['email']); ?>'
+    };
+<?php endif; ?>
+
+var Tawk_LoadStart=new Date();
 (function(){
     var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
     s1.async=true;

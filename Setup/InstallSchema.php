@@ -77,6 +77,15 @@ class InstallSchema implements InstallSchemaInterface
             255,
             [],
             'include_url'
+        )->addColumn(
+            'enable_visitor_recognition',
+            Table::TYPE_INTEGER,
+            1,
+            [
+                'nullable' => false,
+                'default' => 1
+            ],
+            'Enable visitor recognition feature'
         )->setComment(
             'Tawk Widget table that makes connection between stores and widgets'
         );

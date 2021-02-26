@@ -20,6 +20,7 @@ namespace Tawk\Widget\Block;
 
 use Magento\Framework\View\Element\Template;
 use Tawk\Widget\Model\WidgetFactory;
+use Magento\Customer\Model\SessionFactory;
 
 class Embed extends Template
 {
@@ -29,15 +30,21 @@ class Embed extends Template
     protected $model;
     protected $storeManager;
     protected $request;
+    protected $modelSessionFactory;
 
-    public function __construct(WidgetFactory $modelFactory, Template\Context $context, array $data = [])
-    {
+    public function __construct(
+        SessionFactory $sessionFactory,
+        WidgetFactory $modelFactory,
+        Template\Context $context,
+        array $data = []
+    ) {
         parent::__construct($context, $data);
         $this->modelWidgetFactory = $modelFactory->create();
         $this->storeManager = $context->getStoreManager();
         $this->logger = $context->getLogger();
         $this->model = $this->getWidgetModel();
         $this->request = $context->getRequest();
+        $this->modelSessionFactory = $sessionFactory->create();
     }
 
     public function getEmbedUrl()
@@ -65,6 +72,23 @@ class Embed extends Template
         }
 
         return null;
+    }
+
+    public function getCurrentCustomerDetails()
+    {
+        if ($this->model->getEnableVisitorRecognition() != 1) {
+            return null;
+        }
+
+        if (!$this->modelSessionFactory->isLoggedIn()) {
+            return null;
+        }
+
+        $customerSession = $this->modelSessionFactory->getCustomer();
+        return [
+            'name'  => $customerSession->getName(),
+            'email' => $customerSession->getEmail()
+        ];
     }
 
     protected function _toHtml()
