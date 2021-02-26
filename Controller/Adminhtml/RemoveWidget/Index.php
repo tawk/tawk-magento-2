@@ -21,26 +21,40 @@ namespace Tawk\Widget\Controller\Adminhtml\RemoveWidget;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Psr\Log\LoggerInterface;
+use Tawk\Widget\Model\WidgetFactory;
 
 class Index extends \Magento\Backend\App\Action
 {
     protected $resultJsonFactory;
     protected $logger;
+    protected $modelWidgetFactory;
+    protected $request;
 
-    public function __construct(Context $context, JsonFactory $resultJsonFactory, LoggerInterface $logger)
-    {
+    public function __construct(
+        WidgetFactory $modelFactory,
+        Context $context,
+        JsonFactory $resultJsonFactory,
+        LoggerInterface $logger
+    ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->logger = $logger;
+        $this->modelWidgetFactory = $modelFactory->create();
+        $this->request = $this->getRequest();
     }
 
     public function execute()
     {
         $response = $this->resultJsonFactory->create();
         $response->setHeader('Content-type', 'application/json');
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $objectManager->get('Tawk\Widget\Model\Widget')->loadByForStoreId(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_STRING))->delete();
 
-        return $response->setData(['success' => TRUE]);
+        $storeId = filter_var($this->request->getParam('id'), FILTER_SANITIZE_STRING);
+        if (!$storeId) {
+            return $response->setData(['success' => false]);
+        }
+
+        $this->modelWidgetFactory->loadByForStoreId($storeId)->delete();
+
+        return $response->setData(['success' => true]);
     }
 }

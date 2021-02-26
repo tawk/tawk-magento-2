@@ -22,7 +22,7 @@ use Magento\Framework\Controller\ResultFactory;
 
 class Index extends \Magento\Backend\App\Action
 {
-	protected function _isAllowed()
+    protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Tawk_Widget::tawk_go_to_dashboard');
     }

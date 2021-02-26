@@ -19,18 +19,19 @@
 namespace Tawk\Widget\Model;
 
 use \Magento\Framework\Model\AbstractModel;
+use Tawk\Widget\Model\ResourceModel\Widget as WidgetResourceModel;
 
 class Widget extends AbstractModel
 {
-	protected function _construct()
-	{
-		$this->_init('Tawk\Widget\Model\ResourceModel\Widget');
-	}
+    protected function _construct()
+    {
+        $this->_init(WidgetResourceModel::class);
+    }
 
-	public function loadByForStoreId($id) 
-	{
-		return $this->getCollection()
-			->addFieldToFilter('for_store_id', $id)
-			->getFirstItem();
-	}
+    public function loadByForStoreId($id)
+    {
+        return $this->getCollection()
+            ->addFieldToFilter('for_store_id', $id)
+            ->getFirstItem();
+    }
 }

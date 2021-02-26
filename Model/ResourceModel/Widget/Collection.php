@@ -17,13 +17,15 @@
  */
 
 namespace Tawk\Widget\Model\ResourceModel\Widget;
- 
+
 use \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
- 
+use Tawk\Widget\Model\ResourceModel\Widget;
+use Tawk\Widget\Model\Widget as WidgetModel;
+
 class Collection extends AbstractCollection
 {
     protected function _construct()
     {
-        $this->_init('Tawk\Widget\Model\Widget', 'Tawk\Widget\Model\ResourceModel\Widget');
+        $this->_init(WidgetModel::class, Widget::class);
     }
 }

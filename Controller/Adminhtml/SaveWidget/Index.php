@@ -21,17 +21,26 @@ namespace Tawk\Widget\Controller\Adminhtml\SaveWidget;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Backend\App\Action\Context;
 use Psr\Log\LoggerInterface;
+use Tawk\Widget\Model\WidgetFactory;
 
 class Index extends \Magento\Backend\App\Action
 {
     protected $resultJsonFactory;
     protected $logger;
+    protected $modelWidgetFactory;
+    protected $request;
 
-    public function __construct(Context $context, JsonFactory $resultJsonFactory, LoggerInterface $logger)
-    {
+    public function __construct(
+        WidgetFactory $modelFactory,
+        Context $context,
+        JsonFactory $resultJsonFactory,
+        LoggerInterface $logger
+    ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->logger = $logger;
+        $this->modelWidgetFactory = $modelFactory->create();
+        $this->request = $this->getRequest();
     }
 
     public function execute()
@@ -39,29 +48,39 @@ class Index extends \Magento\Backend\App\Action
         $response = $this->resultJsonFactory->create();
         $response->setHeader('Content-type', 'application/json');
 
-        if(!is_string(filter_input(INPUT_POST, 'pageId', FILTER_SANITIZE_STRING)) || !is_string(filter_input(INPUT_POST, 'widgetId', FILTER_SANITIZE_STRING)) || !is_string(filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING))) {
-            return $response->setData(['success' => FALSE]);
+        $pageId = filter_var($this->request->getParam('pageId'), FILTER_SANITIZE_STRING);
+        $widgetId = filter_var($this->request->getParam('widgetId'), FILTER_SANITIZE_STRING);
+        $storeId = filter_var($this->request->getParam('id'), FILTER_SANITIZE_STRING);
+
+        if (!$pageId || !$widgetId || !$storeId) {
+            return $response->setData(['success' => false]);
         }
 
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $model = $objectManager->get('Tawk\Widget\Model\Widget')->loadByForStoreId(filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING));
+        $alwaysdisplay = filter_var($this->request->getParam('alwaysdisplay'), FILTER_SANITIZE_NUMBER_INT);
+        $excludeurl = filter_var($this->request->getParam('excludeurl'), FILTER_SANITIZE_STRING);
+        $donotdisplay = filter_var($this->request->getParam('donotdisplay'), FILTER_SANITIZE_NUMBER_INT);
+        $includeurl = filter_var($this->request->getParam('includeurl'), FILTER_SANITIZE_STRING);
 
-        if( ($_POST['pageId'] == '-1') && ($_POST['widgetId'] == '-1') ){
+        $model = $this->modelWidgetFactory->loadByForStoreId($storeId);
 
-        }else{
-            $model->setPageId(filter_input(INPUT_POST, 'pageId', FILTER_SANITIZE_STRING));
-            $model->setWidgetId(filter_input(INPUT_POST, 'widgetId', FILTER_SANITIZE_STRING));
+        if ($pageId != '-1') {
+            $model->setPageId($pageId);
         }
-        $model->setForStoreId($_POST['id']);
 
-        $model->setAlwaysDisplay($_POST['alwaysdisplay']);
-        $model->setExcludeUrl($_POST['excludeurl']);
+        if ($widgetId != '-1') {
+            $model->setWidgetId($widgetId);
+        }
 
-        $model->setDoNotDisplay($_POST['donotdisplay']);
-        $model->setIncludeUrl($_POST['includeurl']);
+        $model->setForStoreId($storeId);
+
+        $model->setAlwaysDisplay($alwaysdisplay);
+        $model->setExcludeUrl($excludeurl);
+
+        $model->setDoNotDisplay($donotdisplay);
+        $model->setIncludeUrl($includeurl);
 
         $model->save();
 
-        return $response->setData(['success' => TRUE]);
+        return $response->setData(['success' => true]);
     }
 }
