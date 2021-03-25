@@ -162,6 +162,9 @@ input:checked + .slider:before {
                     if(e.data.action === 'removeWidget') {
                         removeWidget(e);
                     }
+                    if(e.data.action === 'reloadHeight') {
+                        reloadIframeHeight(e.data.height);
+                    }
                 }
             });
 
@@ -192,6 +195,19 @@ input:checked + .slider:before {
                 jQuery.get(removeWidgetUrl + '?id=' + jQuery( "#websiteids" ).val(), function (response) {
                     e.source.postMessage({action : 'removeDone'}, baseUrl);
                 });
+            }
+
+            function reloadIframeHeight(height) {
+                if (!height) {
+                    return;
+                }
+
+                var iframe = jQuery('#tawkIframe');
+                if (height === iframe.height()) {
+                    return;
+                }
+
+                iframe.height(height);
             }
 
             jQuery(".savesettingsbtn" ).click(function(e) {
