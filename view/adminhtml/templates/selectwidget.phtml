@@ -279,7 +279,7 @@ input:checked + .slider:before {
                 if (response.pageid) {
                     src = src + '&currentPageId=' + response.pageid;
                 }
-                src = src + '&transparentBackground=1&parentDomain=' + domain;
+                src = src + '&transparentBackground=1&platform=magento&parentDomain=' + domain;
                 document.getElementById('tawk_widget_customization').src = src;
 
                 jQuery('#excludeurl').val(response.excludeurl);
@@ -313,7 +313,7 @@ input:checked + .slider:before {
 
 <iframe
     id="tawk_widget_customization"
-    style="border:none; width:100%; margin: 0 0 0 0; padding: 0 0 0 0; min-height: 300px"
+    style="border:none; width:100%; margin: 0; padding: 0; margin-top: 24px; min-height: 300px"
     src="<?= $block->escapeUrl($block->getIframeUrl()) ?>">
 </iframe>
 
