@@ -279,7 +279,7 @@ input:checked + .slider:before {
                 if (response.pageid) {
                     src = src + '&currentPageId=' + response.pageid;
                 }
-                src = src + '&transparentBackground=1&platform=magento&parentDomain=' + domain;
+                src = src + '&transparentBackground=1&pltf=magento&pltfv=2&parentDomain=' + domain;
                 document.getElementById('tawk_widget_customization').src = src;
 
                 jQuery('#excludeurl').val(response.excludeurl);
