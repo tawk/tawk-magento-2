@@ -162,6 +162,9 @@ input:checked + .slider:before {
                     if(e.data.action === 'removeWidget') {
                         removeWidget(e);
                     }
+                    if(e.data.action === 'reloadHeight') {
+                        reloadIframeHeight(e.data.height);
+                    }
                 }
             });
 
@@ -192,6 +195,19 @@ input:checked + .slider:before {
                 jQuery.get(removeWidgetUrl + '?id=' + jQuery( "#websiteids" ).val(), function (response) {
                     e.source.postMessage({action : 'removeDone'}, baseUrl);
                 });
+            }
+
+            function reloadIframeHeight(height) {
+                if (!height) {
+                    return;
+                }
+
+                var iframe = jQuery('#tawkIframe');
+                if (height === iframe.height()) {
+                    return;
+                }
+
+                iframe.height(height);
             }
 
             jQuery(".savesettingsbtn" ).click(function(e) {
@@ -263,7 +279,7 @@ input:checked + .slider:before {
                 if (response.pageid) {
                     src = src + '&currentPageId=' + response.pageid;
                 }
-                src = src + '&transparentBackground=1&parentDomain=' + domain;
+                src = src + '&transparentBackground=1&pltf=magento&pltfv=2&parentDomain=' + domain;
                 document.getElementById('tawk_widget_customization').src = src;
 
                 jQuery('#excludeurl').val(response.excludeurl);
@@ -297,7 +313,7 @@ input:checked + .slider:before {
 
 <iframe
     id="tawk_widget_customization"
-    style="border:none; width:100%; margin: 0 0 0 0; padding: 0 0 0 0; min-height: 300px"
+    style="border:none; width:100%; margin: 0; padding: 0; margin-top: 24px; min-height: 300px"
     src="<?= $block->escapeUrl($block->getIframeUrl()) ?>">
 </iframe>
 

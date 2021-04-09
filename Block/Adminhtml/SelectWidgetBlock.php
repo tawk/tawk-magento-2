@@ -62,7 +62,7 @@ class SelectWidgetBlock extends Template
     {
         return $this->getBaseUrl().'/generic/widgets'
             .'?currentWidgetId=&currentPageId=&transparentBackground=1'
-            .'&parentDomain='.$this->mainurl();
+            .'&pltf=magento&pltfv=2&parentDomain='.$this->mainurl();
     }
 
     public function getBaseUrl()
