@@ -38,11 +38,9 @@ class SelectWidgetBlock extends Template
 
     public function mainurl()
     {
-        $httpsServer = $this->request->getServer('HTTPS');
-        if (isset($httpsServer) && $httpsServer != 'off') {
-            $protocol = "https";
-        } else {
-            $protocol = 'http';
+        $protocol = 'http';
+        if ($this->request->isSecure()) {
+            $protocol = 'https';
         }
         return $protocol . "://" . $this->request->getServer('HTTP_HOST');
     }
