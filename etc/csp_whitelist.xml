@@ -22,6 +22,7 @@
     <policies>
         <policy id="style-src">
             <values>
+                <value id="tawkto" type="host">*.tawk.to</value>
                 <value id="googleapis-font" type="host">fonts.googleapis.com</value>
                 <value id="jsdelivr-cdn" type="host">cdn.jsdelivr.net</value>
             </values>
