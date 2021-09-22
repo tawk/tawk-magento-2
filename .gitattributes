@@ -1,1 +1,2 @@
+# exclude docker files from archive
 /docker export-ignore
