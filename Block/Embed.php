@@ -19,19 +19,63 @@
 namespace Tawk\Widget\Block;
 
 use Magento\Framework\View\Element\Template;
-use Tawk\Widget\Model\WidgetFactory;
 use Magento\Customer\Model\SessionFactory;
+
+use Tawk\Modules\UrlPatternMatcher;
+use Tawk\Widget\Model\WidgetFactory;
 
 class Embed extends Template
 {
-    const TAWK_EMBED_URL = 'https://embed.tawk.to';
+    /**
+     * Tawk.to Widget Factory instance
+     *
+     * @var $modelWidgetFactory
+     */
     protected $modelWidgetFactory;
+
+    /**
+     * Logger instance
+     *
+     * @var $logger
+     */
     protected $logger;
+
+    /**
+     * Tawk.to Widget Model instance
+     *
+     * @var $model
+     */
     protected $model;
+
+    /**
+     * Store Manager instance
+     *
+     * @var $storeManager
+     */
     protected $storeManager;
+
+    /**
+     * Request instance
+     *
+     * @var $request
+     */
     protected $request;
+
+    /**
+     * Session Factory instance
+     *
+     * @var $modelSessionFactory
+     */
     protected $modelSessionFactory;
 
+    /**
+     * Constructor
+     *
+     * @param SessionFactory $sessionFactory Session Factory instance
+     * @param WidgetFactory $modelFactory Tawk.to Widget Factory instance
+     * @param Template\Context $context Template Context
+     * @param array $data Template data // TODO: Look up what this is
+     */
     public function __construct(
         SessionFactory $sessionFactory,
         WidgetFactory $modelFactory,
@@ -47,11 +91,21 @@ class Embed extends Template
         $this->modelSessionFactory = $sessionFactory->create();
     }
 
+    /**
+     * Retrieves embed url.
+     *
+     * @return string Embed Url.
+     */
     public function getEmbedUrl()
     {
-        return self::TAWK_EMBED_URL.'/'.$this->model->getPageId().'/'.$this->model->getWidgetId();
+        return 'https://embed.tawk.to'.'/'.$this->model->getPageId().'/'.$this->model->getWidgetId();
     }
 
+    /**
+     * Instantiate widget model
+     *
+     * @return WidgetModel|null Returns `WidgetModel` if model is found. Otherwise, returns `null`.
+     */
     private function getWidgetModel()
     {
         $store = $this->storeManager->getStore();
@@ -74,6 +128,14 @@ class Embed extends Template
         return null;
     }
 
+    /**
+     * Retrieves current customer details.
+     *
+     * @return array {
+     *   name: string,
+     *   email: string
+     * }
+     */
     public function getCurrentCustomerDetails()
     {
         if ($this->model->getEnableVisitorRecognition() != 1) {
@@ -91,6 +153,9 @@ class Embed extends Template
         ];
     }
 
+    /**
+     * To or to not display the selected widget.
+     */
     protected function _toHtml()
     {
         if ($this->model === null) {

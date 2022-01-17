@@ -1,2 +1,5 @@
 # exclude docker files from archive
 /docker export-ignore
+
+# exclude linter files from archive
+/.phpcs.* export-ignore

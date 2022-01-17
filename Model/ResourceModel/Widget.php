@@ -17,11 +17,14 @@
  */
 
 namespace Tawk\Widget\Model\ResourceModel;
- 
+
 use \Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 class Widget extends AbstractDb
 {
+    /**
+     * Constructor
+     */
     protected function _construct()
     {
         $this->_init('tawk_widget', 'id');

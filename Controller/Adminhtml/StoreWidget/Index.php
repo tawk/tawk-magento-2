@@ -25,11 +25,42 @@ use Tawk\Widget\Model\WidgetFactory;
 
 class Index extends \Magento\Backend\App\Action
 {
+    /**
+     * Json Factory instance
+     *
+     * @var $resultJsonfactory
+     */
     protected $resultJsonFactory;
+
+    /**
+     * Logger instance
+     *
+     * @var $logger
+     */
     protected $logger;
+
+    /**
+     * Tawk.to Widget Factory instance
+     *
+     * @var $modelWidgetFactory
+     */
     protected $modelWidgetFactory;
+
+    /**
+     * Request body
+     *
+     * @var $request
+     */
     protected $request;
 
+    /**
+     * Constructor
+     *
+     * @param WidgetFactory $modelWidgetFactory Tawk.to Widget Factory instance
+     * @param Context $context App Context
+     * @param JsonFactory $resultJsonFactory Json Factory instance
+     * @param LoggerInterface $logger PSR Logger
+     */
     public function __construct(
         WidgetFactory $modelWidgetFactory,
         Context $context,
@@ -43,6 +74,20 @@ class Index extends \Magento\Backend\App\Action
         $this->request = $this->getRequest();
     }
 
+    /**
+     * Retrieves the store property, widget, and its visibility options.
+     *
+     * @return array {
+     *   success: bool,
+     *   pageid: string,
+     *   widgetid: string,
+     *   alwaysdisplay: int,
+     *   excludeurl: string,
+     *   donotdisplay: int,
+     *   includeurl: string,
+     *   enableVisitorRecognition: int
+     * }
+     */
     public function execute()
     {
         $response = $this->resultJsonFactory->create();
