@@ -21,7 +21,6 @@ namespace Tawk\Widget\Block;
 use Magento\Framework\View\Element\Template;
 use Magento\Customer\Model\SessionFactory;
 
-use Tawk\Modules\UrlPatternMatcher;
 use Tawk\Widget\Model\WidgetFactory;
 
 class Embed extends Template
