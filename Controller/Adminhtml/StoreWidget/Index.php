@@ -40,7 +40,7 @@ class Index extends \Magento\Backend\App\Action
     protected $logger;
 
     /**
-     * Tawk.to Widget Factory instance
+     * Tawk.to Widget Model instance
      *
      * @var $modelWidgetFactory
      */
@@ -56,7 +56,7 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Constructor
      *
-     * @param WidgetFactory $modelWidgetFactory Tawk.to Widget Factory instance
+     * @param WidgetFactory $modelWidgetFactory Tawk.to Widget Model instance
      * @param Context $context App Context
      * @param JsonFactory $resultJsonFactory Json Factory instance
      * @param LoggerInterface $logger PSR Logger

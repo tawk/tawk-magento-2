@@ -24,9 +24,7 @@ use Magento\Framework\View\Result\PageFactory;
 class Index extends \Magento\Backend\App\Action
 {
     /**
-     * Page factory result
-     *
-     * TODO: research what is PageFactory
+     * Page factory instance
      *
      * @var $resultPageFactory
      */
@@ -56,8 +54,6 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * Creates the widget selection page
-     *
-     * TODO: Research PageFactory create function
      *
      * @return void
      */

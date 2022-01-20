@@ -26,7 +26,7 @@ use Tawk\Widget\Model\WidgetFactory;
 class Embed extends Template
 {
     /**
-     * Tawk.to Widget Factory instance
+     * Tawk.to Widget Model instance
      *
      * @var $modelWidgetFactory
      */
@@ -71,9 +71,9 @@ class Embed extends Template
      * Constructor
      *
      * @param SessionFactory $sessionFactory Session Factory instance
-     * @param WidgetFactory $modelFactory Tawk.to Widget Factory instance
+     * @param WidgetFactory $modelFactory Tawk.to Widget Model instance
      * @param Template\Context $context Template Context
-     * @param array $data Template data // TODO: Look up what this is
+     * @param array $data Template data
      */
     public function __construct(
         SessionFactory $sessionFactory,

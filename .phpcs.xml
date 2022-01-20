@@ -13,6 +13,9 @@
 
 	<rule ref="Magento2">
 		<exclude name="PSR12.Properties.ConstantVisibility.NotFound" />
+
+		<!-- TODO: Upgrade obsolete migration scripts to Declarative Schema and Data Patches -->
+		<exclude name="Magento2.Legacy.InstallUpgrade" />
 	</rule>
 	<rule ref="PHPCompatibility"/>
 </ruleset>

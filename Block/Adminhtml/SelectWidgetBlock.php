@@ -31,7 +31,7 @@ class SelectWidgetBlock extends Template
     protected $logger;
 
     /**
-     * Tawk.to Widget Factory instance
+     * Tawk.to Widget Model instance
      *
      * @var $modelWidgetFactory
      */
@@ -48,8 +48,8 @@ class SelectWidgetBlock extends Template
      * Constructor
      *
      * @param Template\Context $context Template context
-     * @param WidgetFactory $modelFactory Tawk.to Widget Factory instance
-     * @param array $data Template data // TODO: search what this is
+     * @param WidgetFactory $modelFactory Tawk.to Widget Model instance
+     * @param array $data Template data
      */
     public function __construct(Template\Context $context, WidgetFactory $modelFactory, array $data = [])
     {
