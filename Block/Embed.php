@@ -188,9 +188,9 @@ class Embed extends Template
                 $current_url = trim(strtolower($current_url));
 
                 $excluded_url_list = preg_split("/,/", $excluded_url_list);
-                if ( UrlPatternMatcher::match( $current_url, $excluded_url_list ) ) {
-					$display = false;
-				}
+                if (UrlPatternMatcher::match($current_url, $excluded_url_list)) {
+                    $display = false;
+                }
             }
         } else {
             $display = false;
@@ -213,9 +213,9 @@ class Embed extends Template
                 $current_url = trim(strtolower($current_url));
 
                 $included_url_list = preg_split("/,/", $included_url_list);
-                if ( UrlPatternMatcher::match( $current_url, $included_url_list ) ) {
-					$display = true;
-				}
+                if (UrlPatternMatcher::match($current_url, $included_url_list)) {
+                    $display = true;
+                }
             }
         }
 
