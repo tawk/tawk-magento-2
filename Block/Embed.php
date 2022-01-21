@@ -21,6 +21,7 @@ namespace Tawk\Widget\Block;
 use Magento\Framework\View\Element\Template;
 use Magento\Customer\Model\SessionFactory;
 
+use Tawk\Modules\UrlPatternMatcher;
 use Tawk\Widget\Model\WidgetFactory;
 
 class Embed extends Template
@@ -187,12 +188,9 @@ class Embed extends Template
                 $current_url = trim(strtolower($current_url));
 
                 $excluded_url_list = preg_split("/,/", $excluded_url_list);
-                foreach ($excluded_url_list as $exclude_url) {
-                    $exclude_url = strtolower(urldecode(trim($exclude_url)));
-                    if (strpos($current_url, $exclude_url) !== false) {
-                        $display = false;
-                    }
-                }
+                if ( UrlPatternMatcher::match( $current_url, $excluded_url_list ) ) {
+					$display = false;
+				}
             }
         } else {
             $display = false;
@@ -215,12 +213,9 @@ class Embed extends Template
                 $current_url = trim(strtolower($current_url));
 
                 $included_url_list = preg_split("/,/", $included_url_list);
-                foreach ($included_url_list as $include_url) {
-                    $include_url = strtolower(urldecode(trim($include_url)));
-                    if (strpos($current_url, $include_url) !== false) {
-                        $display = true;
-                    }
-                }
+                if ( UrlPatternMatcher::match( $current_url, $included_url_list ) ) {
+					$display = true;
+				}
             }
         }
 
