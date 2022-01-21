@@ -3,7 +3,7 @@ define([], function() {
 		'use strict';
 
 		window.Tawk_API = window.Tawk_API || {};
-		var visitor = config.visitorCustomerDetails;
+		var visitor = config.visitor;
 		var embedUrl = config.embedUrl;
 
 		if (visitor) {

@@ -18,10 +18,8 @@
 ?>
 
 <?php $customer_details = $block->getCurrentCustomerDetails(); ?>
-
-<!-- The value inside text/x-magento-init should be valid JSON -->
-<?php if ($customer_details === null): ?>
 <script type="text/x-magento-init">
+<?php if ($customer_details === null): ?>
 {
     "*": {
         "tawk-embed" : {
@@ -29,9 +27,7 @@
         }
     }
 }
-</script>
 <?php else: ?>
-<script type="text/x-magento-init">
 {
     "*": {
         "tawk-embed" : {
@@ -43,5 +39,5 @@
         }
     }
 }
-</script>
 <?php endif; ?>
+</script>
