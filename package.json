@@ -1,0 +1,36 @@
+{
+  "name": "tawk-magento-2",
+  "version": "1.5.2",
+  "description": "Free live chat widget for your site",
+  "scripts": {
+    "build": "npm install && composer run build:dev",
+    "lint": "npm run eslint && composer run lint",
+    "eslint": "eslint -c ./vendor/magento/magento-coding-standard/eslint/.eslintrc --rulesdir ./vendor/magento/magento-coding-standard/eslint/rules ./**/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alvinjohnsonso/tawk-magento-2.git"
+  },
+  "keywords": [
+    "magento 2",
+    "tawk",
+    "tawkto",
+    "live chat",
+    "messaging",
+    "b2c communication tool",
+    "support tool",
+    "helpdesk",
+    "agents"
+  ],
+  "author": "tawk.to",
+  "license": "OSL-3.0",
+  "bugs": {
+    "url": "https://github.com/alvinjohnsonso/tawk-magento-2/issues"
+  },
+  "homepage": "https://github.com/alvinjohnsonso/tawk-magento-2#readme",
+  "dependencies": {
+    "eslint": "^8.7.0",
+    "husky": "^4.3.8",
+    "lint-staged": "^12.3.1"
+  }
+}
