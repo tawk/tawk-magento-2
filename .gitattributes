@@ -5,6 +5,7 @@
 /.phpcs.* export-ignore
 /.huskyrc.js
 /.lintstagedrc.js
+/.stylelintrc.json
 /.nvmrc
 /package-lock.json
 /package.json

@@ -3,3 +3,4 @@ vendor
 dev
 node_modules
 .eslintcache
+.stylelintcache

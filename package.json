@@ -5,7 +5,8 @@
   "scripts": {
     "build": "npm install && composer run build:dev",
     "lint": "npm run eslint && composer run lint",
-    "eslint": "eslint -c ./vendor/magento/magento-coding-standard/eslint/.eslintrc --rulesdir ./vendor/magento/magento-coding-standard/eslint/rules ./**/*.js"
+    "eslint": "eslint -c ./vendor/magento/magento-coding-standard/eslint/.eslintrc --rulesdir ./vendor/magento/magento-coding-standard/eslint/rules ./**/*.js",
+    "stylelint": "stylelint ./**/*.css"
   },
   "repository": {
     "type": "git",
@@ -28,9 +29,10 @@
     "url": "https://github.com/alvinjohnsonso/tawk-magento-2/issues"
   },
   "homepage": "https://github.com/alvinjohnsonso/tawk-magento-2#readme",
-  "dependencies": {
+  "devDependencies": {
     "eslint": "^8.7.0",
     "husky": "^4.3.8",
-    "lint-staged": "^12.3.1"
+    "lint-staged": "^12.3.1",
+    "stylelint": "^14.3.0"
   }
 }

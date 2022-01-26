@@ -25,7 +25,7 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Checks current session if authorized to redirect to the tawk.to dashboard.
      *
-     * @return void
+     * @return boolean Returns `true` if current user is allowed to go to tawk.to dashboard. Otherwise, `false`.
      */
     protected function _isAllowed()
     {
@@ -34,8 +34,6 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * Executes a redirect to the tawk.to dashboard
-     *
-     * @return void
      */
     public function execute()
     {
