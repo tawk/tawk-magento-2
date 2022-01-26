@@ -26,21 +26,21 @@ class SelectWidgetBlock extends Template
     /**
      * Logger instance
      *
-     * @var $logger
+     * @var \Psr\Log\LoggerInterface $logger
      */
     protected $logger;
 
     /**
      * Tawk.to Widget Model instance
      *
-     * @var $modelWidgetFactory
+     * @var WidgetFactory $modelWidgetFactory
      */
     protected $modelWidgetFactory;
 
     /**
      * Request instance
      *
-     * @var $request
+     * @var \Magento\Framework\App\RequestInterface $request
      */
     protected $request;
 

@@ -26,7 +26,7 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Page factory instance
      *
-     * @var $resultPageFactory
+     * @var PageFactory $resultPageFactory
      */
     protected $resultPageFactory;
 
@@ -45,7 +45,7 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Checks current session if authorized to choose widget.
      *
-     * @return void
+     * @return boolean Returns `true` if current user is allowed to choose widget.
      */
     protected function _isAllowed()
     {
@@ -54,8 +54,6 @@ class Index extends \Magento\Backend\App\Action
 
     /**
      * Creates the widget selection page
-     *
-     * @return void
      */
     public function execute()
     {

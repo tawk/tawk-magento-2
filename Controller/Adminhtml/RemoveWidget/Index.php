@@ -28,28 +28,28 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Json Factory instance
      *
-     * @var $resultJsonfactory
+     * @var JsonFactory $resultJsonfactory
      */
     protected $resultJsonFactory;
 
     /**
      * Logger instance
      *
-     * @var $logger
+     * @var LoggerInterface $logger
      */
     protected $logger;
 
     /**
      * Tawk.to Widget Model instance
      *
-     * @var $modelWidgetFactory
+     * @var WidgetFactory $modelWidgetFactory
      */
     protected $modelWidgetFactory;
 
     /**
      * Request body
      *
-     * @var $request
+     * @var \Magento\Framework\App\RequestInterface $request
      */
     protected $request;
 

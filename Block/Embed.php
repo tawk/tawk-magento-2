@@ -29,42 +29,42 @@ class Embed extends Template
     /**
      * Tawk.to Widget Model instance
      *
-     * @var $modelWidgetFactory
+     * @var WidgetFactory $modelWidgetFactory
      */
     protected $modelWidgetFactory;
 
     /**
      * Logger instance
      *
-     * @var $logger
+     * @var \Psr\Log\LoggerInterface $logger
      */
     protected $logger;
 
     /**
-     * Tawk.to Widget Model instance
+     * Tawk.to Widget Model Data Object instance
      *
-     * @var $model
+     * @var \Magento\Framework\DataObject $model
      */
     protected $model;
 
     /**
      * Store Manager instance
      *
-     * @var $storeManager
+     * @var \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     protected $storeManager;
 
     /**
      * Request instance
      *
-     * @var $request
+     * @var \Magento\Framework\App\RequestInterface $request
      */
     protected $request;
 
     /**
      * Session Factory instance
      *
-     * @var $modelSessionFactory
+     * @var SessionFactory $modelSessionFactory
      */
     protected $modelSessionFactory;
 
@@ -102,9 +102,9 @@ class Embed extends Template
     }
 
     /**
-     * Instantiate widget model
+     * Instantiate widget model data object
      *
-     * @return WidgetModel|null Returns `WidgetModel` if model is found. Otherwise, returns `null`.
+     * @return \Magento\Framework\DataObject|null Returns `DataObject` if model is found. Otherwise, returns `null`.
      */
     private function getWidgetModel()
     {
