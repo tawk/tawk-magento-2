@@ -45,6 +45,13 @@ class SelectWidgetBlock extends Template
     protected $request;
 
     /**
+     * List of valid patterns
+     *
+     * @var string[]
+     */
+    private static $validPatternList;
+
+    /**
      * Constructor
      *
      * @param Template\Context $context Template context
@@ -74,6 +81,44 @@ class SelectWidgetBlock extends Template
     }
 
     /**
+     * Retrieves the list of valid patterns.
+     *
+     * @return string[]
+     */
+    public function getValidPatternList() // Note: static methods are discouraged.
+    {
+        if (isset(self::$validPatternList) === false) {
+            self::$validPatternList = [
+                '*',
+                '*/to/somewhere',
+                '/*/to/somewhere',
+                '/path/*/somewhere',
+                '/path/*/lead/*/somewhere',
+                '/path/*/*/somewhere',
+                '/path/to/*',
+                '/path/to/*/',
+                '*/to/*/page',
+                '/*/to/*/page',
+                '/path/*/other/*',
+                '/path/*/other/*/',
+                'http://www.example.com/',
+                'http://www.example.com/*',
+                'http://www.example.com/*/to/somewhere',
+                'http://www.example.com/path/*/somewhere',
+                'http://www.example.com/path/*/lead/*/somewhere',
+                'http://www.example.com/path/*/*/somewhere',
+                'http://www.example.com/path/to/*',
+                'http://www.example.com/path/to/*/',
+                'http://www.example.com/*/to/*/page',
+                'http://www.example.com/path/*/other/*',
+                'http://www.example.com/path/*/other/*/'
+            ];
+        }
+
+        return self::$validPatternList;
+    }
+
+    /**
      * Retrieves list of stores and creates option DOM elements
      *
      * @return string Option DOM elements
@@ -85,6 +130,22 @@ class SelectWidgetBlock extends Template
         $websites = $this->_storeManager->getWebsites();
         foreach ($websites as $website) {
             $sdstr .= '<option value="'.$website->getId().'">'.$website->getName().'</option>';
+        }
+        return $sdstr;
+    }
+
+    /**
+     * Builds the list of valid patterns and creates li DOM elements
+     *
+     * @return string li DOM elements
+     */
+    public function getValidPatternsHtml()
+    {
+        $sdstr = '';
+        $patterns = $this->getValidPatternList();
+
+        foreach ($patterns as $pattern) {
+            $sdstr .= '<li>' . $pattern . '</li>';
         }
         return $sdstr;
     }
