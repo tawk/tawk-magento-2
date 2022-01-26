@@ -3,9 +3,13 @@
 
 # exclude linter files from archive
 /.phpcs.* export-ignore
-/.huskyrc.js
-/.lintstagedrc.js
-/.stylelintrc.json
-/.nvmrc
-/package-lock.json
-/package.json
+/.huskyrc.js export-ignore
+/.lintstagedrc.js export-ignore
+/.stylelintrc.json export-ignore
+/.nvmrc export-ignore
+/package-lock.json export-ignore
+/package.json export-ignore
+
+# exclude .gitignore and .gitattributes from archive
+/.gitattributes export-ignore
+/.gitignore export-ignore
