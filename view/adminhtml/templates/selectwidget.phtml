@@ -55,8 +55,16 @@
             </label>
         </div>
         <div class="tawk-fields" id="exlucded_urls_container">
-            <label for="excludeurl">(Exception) hide tawk.to widget to the following URL</label>
-            <BR />
+            <label for="excludeurl">
+                (Exception) hide tawk.to widget to the following URLs or paths. Separate each entry with a comma(,).
+            </label>
+            <div class="tawk-tooltip">
+                Examples of accepted patterns
+                <ul class="tawk-tooltiptext">
+                <?= /* @noEscape */ $block->getValidPatternsHtml(); ?>
+                </ul>
+            </div>
+            <br />
             <textarea name="excludeurl" id="excludeurl" rows="10" style="width:80%;" ></textarea>
         </div>
         <div class="tawk-fields">
@@ -67,8 +75,16 @@
             </label>
         </div>
         <div class="tawk-fields"  id="included_urls_container">
-            <label for="includeurl">(Exception) display tawk.to widget to the following URL</label>
-            <BR />
+            <label for="includeurl">
+                (Exception) display tawk.to widget to the following URLs or paths. Separate each entry with a comma(,).
+            </label>
+            <div class="tawk-tooltip">
+                Examples of accepted patterns
+                <ul class="tawk-tooltiptext">
+                <?= /* @noEscape */ $block->getValidPatternsHtml(); ?>
+                </ul>
+            </div>
+            <br />
             <textarea name="includeurl" id="includeurl" rows="10" style="width:80%;" ></textarea>
         </div>
     </div>
