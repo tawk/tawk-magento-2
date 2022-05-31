@@ -25,7 +25,19 @@ use Magento\Framework\DB\Ddl\Table;
 
 class UpgradeSchema implements UpgradeSchemaInterface
 {
+    /**
+     * Tawk.to plugin DB table name.
+     *
+     * @var $tawk_widget
+     */
     protected $tableName = 'tawk_widget';
+
+    /**
+     * Upgrade runner
+     *
+     * @param SchemaSetupInterface $setup Schema Setup instance
+     * @param ModuleContextInterface $context Module Context instance
+     */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
@@ -34,6 +46,15 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $setup->endSetup();
     }
 
+    /**
+     * Upgrade script for version 1.5.0
+     *
+     * Adds Enable Visitor Recognition field.
+     *
+     * @param [type] $setup
+     * @param [type] $context
+     * @return void
+     */
     private function versionUpdate150($setup, $context)
     {
         if (version_compare($context->getVersion(), '1.5.0', '<')) {

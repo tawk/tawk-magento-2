@@ -23,11 +23,20 @@ use Tawk\Widget\Model\ResourceModel\Widget as WidgetResourceModel;
 
 class Widget extends AbstractModel
 {
+    /**
+     * Constructor
+     */
     protected function _construct()
     {
         $this->_init(WidgetResourceModel::class);
     }
 
+    /**
+     * Retrieves widget settings by store id.
+     *
+     * @param string $id
+     * @return array Store widget settings
+     */
     public function loadByForStoreId($id)
     {
         return $this->getCollection()

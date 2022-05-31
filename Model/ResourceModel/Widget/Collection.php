@@ -24,6 +24,9 @@ use Tawk\Widget\Model\Widget as WidgetModel;
 
 class Collection extends AbstractCollection
 {
+    /**
+     * Constructor
+     */
     protected function _construct()
     {
         $this->_init(WidgetModel::class, Widget::class);

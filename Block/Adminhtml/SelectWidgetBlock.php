@@ -23,11 +23,41 @@ use Tawk\Widget\Model\WidgetFactory;
 
 class SelectWidgetBlock extends Template
 {
-    const BASE_URL = 'https://plugins.tawk.to';
+    /**
+     * Logger instance
+     *
+     * @var \Psr\Log\LoggerInterface $logger
+     */
     protected $logger;
+
+    /**
+     * Tawk.to Widget Model instance
+     *
+     * @var WidgetFactory $modelWidgetFactory
+     */
     protected $modelWidgetFactory;
+
+    /**
+     * Request instance
+     *
+     * @var \Magento\Framework\App\RequestInterface $request
+     */
     protected $request;
 
+    /**
+     * List of valid patterns
+     *
+     * @var string[]
+     */
+    private static $validPatternList;
+
+    /**
+     * Constructor
+     *
+     * @param Template\Context $context Template context
+     * @param WidgetFactory $modelFactory Tawk.to Widget Model instance
+     * @param array $data Template data
+     */
     public function __construct(Template\Context $context, WidgetFactory $modelFactory, array $data = [])
     {
         parent::__construct($context, $data);
@@ -36,6 +66,11 @@ class SelectWidgetBlock extends Template
         $this->request = $context->getRequest();
     }
 
+    /**
+     * Retrieves current base url
+     *
+     * @return string Base url
+     */
     public function mainurl()
     {
         $protocol = 'http';
@@ -45,6 +80,11 @@ class SelectWidgetBlock extends Template
         return $protocol . "://" . $this->request->getServer('HTTP_HOST');
     }
 
+    /**
+     * Retrieves list of stores and creates option DOM elements
+     *
+     * @return string Option DOM elements
+     */
     public function getWebSiteoptions()
     {
         $sdstr = '';
@@ -56,6 +96,11 @@ class SelectWidgetBlock extends Template
         return $sdstr;
     }
 
+    /**
+     * Retrieves iframe url for widget selection.
+     *
+     * @return string Iframe Url
+     */
     public function getIframeUrl()
     {
         return $this->getBaseUrl().'/generic/widgets'
@@ -63,11 +108,21 @@ class SelectWidgetBlock extends Template
             .'&pltf=magento&pltfv=2&parentDomain='.$this->mainurl();
     }
 
+    /**
+     * Retrieves base tawk.to plugin url.
+     *
+     * @return string base tawk.to plugin url.
+     */
     public function getBaseUrl()
     {
-        return self::BASE_URL;
+        return 'https://plugins.tawk.to';
     }
 
+    /**
+     * Generates list of stores available with their hierarchy
+     *
+     * @return array list of stores available
+     */
     public function getHierarchy()
     {
         $websites = $this->_storeManager->getWebsites();
@@ -95,26 +150,46 @@ class SelectWidgetBlock extends Template
         return $h;
     }
 
+    /**
+     * Retrieves list of widget settings.
+     *
+     * @return array list of widget settings
+     */
     public function getCollection()
     {
         return $this->modelWidgetFactory->create()->getCollection();
     }
 
+    /**
+     * Save widget action
+     */
     public function getFormAction()
     {
         return $this->getUrl('widget/savewidget', ['_secure' => true]);
     }
 
+    /**
+     * Remove widget action
+     */
     public function getRemoveUrl()
     {
         return $this->getUrl('widget/removewidget', ['_secure' => true]);
     }
 
+    /**
+     * Retrieve store widget action
+     */
     public function getStoreWidget()
     {
         return $this->getUrl('widget/storewidget', ['_secure' => true]);
     }
 
+    /**
+     * Parses group details and its widget settings.
+     *
+     * @param object[] $groups list of groups.
+     * @return object[] list of groups with parsed details.
+     */
     private function parseGroups($groups)
     {
         $return = [];
@@ -133,6 +208,12 @@ class SelectWidgetBlock extends Template
         return $return;
     }
 
+    /**
+     * Parses store details and its widget settings.
+     *
+     * @param object[] $stores List of stores.
+     * @return object[] List of groups with parsed details.
+     */
     private function parseStores($stores)
     {
         $return = [];
@@ -151,6 +232,15 @@ class SelectWidgetBlock extends Template
         return $return;
     }
 
+    /**
+     * Retrieves property and widget id for provided store/group id
+     *
+     * @param string $id Store/group id.
+     * @return array {
+     *   pageId: string,
+     *   widgetId: string
+     * }
+     */
     private function getCurrentValuesFor($id)
     {
         $widgets = $this->getCollection();

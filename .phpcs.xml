@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<ruleset name="CS">
+	<description>Custom coding standards.</description>
+	<config name="testVersion" value="5.6-"/>
+	<exclude-pattern>vendor</exclude-pattern>
+	<exclude-pattern>node_modules</exclude-pattern>
+	<exclude-pattern>registration.php</exclude-pattern>
+
+	<arg value="ps"/>
+	<arg name="colors"/>
+	<arg name="parallel" value="100"/>
+	<arg name="extensions" value="php"/>
+	<arg name="cache" value=".phpcs.cache"/>
+
+	<rule ref="Magento2">
+		<exclude name="PSR12.Properties.ConstantVisibility.NotFound" />
+
+		<!-- TODO: Upgrade obsolete migration scripts to Declarative Schema and Data Patches -->
+		<exclude name="Magento2.Legacy.InstallUpgrade" />
+	</rule>
+	<rule ref="PHPCompatibility"/>
+</ruleset>

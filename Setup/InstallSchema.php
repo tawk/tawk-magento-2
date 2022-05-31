@@ -25,6 +25,12 @@ use Magento\Framework\DB\Ddl\Table;
 
 class InstallSchema implements InstallSchemaInterface
 {
+    /**
+     * Initializes plugin widget settings
+     *
+     * @param SchemaSetupInterface $setup Schema Setup instance
+     * @param ModuleContextInterface $context Module Context instance
+     */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();

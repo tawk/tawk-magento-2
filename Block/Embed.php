@@ -19,19 +19,63 @@
 namespace Tawk\Widget\Block;
 
 use Magento\Framework\View\Element\Template;
-use Tawk\Widget\Model\WidgetFactory;
 use Magento\Customer\Model\SessionFactory;
+
+use Tawk\Modules\UrlPatternMatcher;
+use Tawk\Widget\Model\WidgetFactory;
 
 class Embed extends Template
 {
-    const TAWK_EMBED_URL = 'https://embed.tawk.to';
+    /**
+     * Tawk.to Widget Model instance
+     *
+     * @var WidgetFactory $modelWidgetFactory
+     */
     protected $modelWidgetFactory;
+
+    /**
+     * Logger instance
+     *
+     * @var \Psr\Log\LoggerInterface $logger
+     */
     protected $logger;
+
+    /**
+     * Tawk.to Widget Model Data Object instance
+     *
+     * @var \Magento\Framework\DataObject $model
+     */
     protected $model;
+
+    /**
+     * Store Manager instance
+     *
+     * @var \Magento\Store\Model\StoreManagerInterface $storeManager
+     */
     protected $storeManager;
+
+    /**
+     * Request instance
+     *
+     * @var \Magento\Framework\App\RequestInterface $request
+     */
     protected $request;
+
+    /**
+     * Session Factory instance
+     *
+     * @var SessionFactory $modelSessionFactory
+     */
     protected $modelSessionFactory;
 
+    /**
+     * Constructor
+     *
+     * @param SessionFactory $sessionFactory Session Factory instance
+     * @param WidgetFactory $modelFactory Tawk.to Widget Model instance
+     * @param Template\Context $context Template Context
+     * @param array $data Template data
+     */
     public function __construct(
         SessionFactory $sessionFactory,
         WidgetFactory $modelFactory,
@@ -47,11 +91,21 @@ class Embed extends Template
         $this->modelSessionFactory = $sessionFactory->create();
     }
 
+    /**
+     * Retrieves embed url.
+     *
+     * @return string Embed Url.
+     */
     public function getEmbedUrl()
     {
-        return self::TAWK_EMBED_URL.'/'.$this->model->getPageId().'/'.$this->model->getWidgetId();
+        return 'https://embed.tawk.to'.'/'.$this->model->getPageId().'/'.$this->model->getWidgetId();
     }
 
+    /**
+     * Instantiate widget model data object
+     *
+     * @return \Magento\Framework\DataObject|null Returns `DataObject` if model is found. Otherwise, returns `null`.
+     */
     private function getWidgetModel()
     {
         $store = $this->storeManager->getStore();
@@ -74,6 +128,14 @@ class Embed extends Template
         return null;
     }
 
+    /**
+     * Retrieves current customer details.
+     *
+     * @return array {
+     *   name: string,
+     *   email: string
+     * }
+     */
     public function getCurrentCustomerDetails()
     {
         if ($this->model->getEnableVisitorRecognition() != 1) {
@@ -91,6 +153,9 @@ class Embed extends Template
         ];
     }
 
+    /**
+     * To or to not display the selected widget.
+     */
     protected function _toHtml()
     {
         if ($this->model === null) {
@@ -123,11 +188,8 @@ class Embed extends Template
                 $current_url = trim(strtolower($current_url));
 
                 $excluded_url_list = preg_split("/,/", $excluded_url_list);
-                foreach ($excluded_url_list as $exclude_url) {
-                    $exclude_url = strtolower(urldecode(trim($exclude_url)));
-                    if (strpos($current_url, $exclude_url) !== false) {
-                        $display = false;
-                    }
+                if (UrlPatternMatcher::match($current_url, $excluded_url_list)) {
+                    $display = false;
                 }
             }
         } else {
@@ -151,11 +213,8 @@ class Embed extends Template
                 $current_url = trim(strtolower($current_url));
 
                 $included_url_list = preg_split("/,/", $included_url_list);
-                foreach ($included_url_list as $include_url) {
-                    $include_url = strtolower(urldecode(trim($include_url)));
-                    if (strpos($current_url, $include_url) !== false) {
-                        $display = true;
-                    }
+                if (UrlPatternMatcher::match($current_url, $included_url_list)) {
+                    $display = true;
                 }
             }
         }
