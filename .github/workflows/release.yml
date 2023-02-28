@@ -24,3 +24,5 @@ jobs:
           asset_path: ./tawkmagento2.zip
           asset_name: tawkmagento2.zip
           asset_content_type: application/zip
+          tags: ${{ steps.meta.outpus.tags}}
+          labels: ${{ steps.meta.outpus.labels}}
