@@ -1,0 +1,31 @@
+name: create-release-artifact
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  create-release-artifact:
+    name: Creating release artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: install dependencies
+        uses: php-actions/composer@v6
+        with:
+          command: run build:prod
+
+      - name: build artifact
+        run: composer run package && mv ./tmp/tawkmagento2.zip tawkmagento2.zip
+
+      - name: upload artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./tawkmagento2.zip
+          asset_name: tawkmagento2.zip
+          asset_content_type: application/zip
