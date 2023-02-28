@@ -26,9 +26,15 @@
     "php": ">=5.6.0"
   },
   "autoload": {
-    "files": [ "registration.php" ],
+    "files": [
+      "registration.php"
+    ],
     "psr-4": {
       "Tawk\\Widget\\": ""
     }
+  },
+  "scripts": {
+    "package": "composer run clean && mkdir -p ./tmp/tawkmagento2 && cp -r ./view ./tmp/tawkmagento2 && cp -r ./etc ./tmp/tawkmagento2 && cp -r ./Setup ./tmp/tawkmagento2 && cp -r ./Model ./tmp/tawkmagento2 && cp -r ./Controller ./tmp/tawkmagento2 && cp -r ./Block ./tmp/tawkmagento2 && cp ./registration.php ./tmp/tawkmagento2 && cp ./composer.json ./tmp/tawkmagento2 && cp README.md ./tmp/tawkmagento2 && (cd ./tmp && zip -9 -rq ./tawkmagento2.zip ./tawkmagento2)",
+    "clean": "rm -rf ./tmp"
   }
 }
