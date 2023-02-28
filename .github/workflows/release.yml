@@ -12,11 +12,6 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
 
-      - name: install dependencies
-        uses: php-actions/composer@v6
-        with:
-          command: run build:prod
-
       - name: build artifact
         run: composer run package && mv ./tmp/tawkmagento2.zip tawkmagento2.zip
 
