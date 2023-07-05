@@ -21,6 +21,7 @@ Don’t have a tawk.to account yet? [Create one here.](https://tawk.to/?utm_sour
 ### Standard Installation
 1. Be sure Composer is installed. You can install it by entering in your website root directory and executing this command: `curl -sS https://getcomposer.org/installer | php`
 2. When Composer has been installed, add the GitHub repository to your Composer repositories by executing this command: `php composer.phar config repositories.tawk vcs "https://github.com/tawk/tawk-magento-2.git"`
+3. Require the package with composer executing this command:  `php composer.phar require tawk/widget`
 
 ## Enabling the Extension
 Once the extension is installed, you will need to execute the following command lines from your website root directory:
