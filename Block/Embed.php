@@ -25,6 +25,7 @@ use Magento\Customer\Model\SessionFactory;
 class Embed extends Template
 {
     const TAWK_EMBED_URL = 'https://embed.tawk.to';
+    
     protected $modelWidgetFactory;
     protected $logger;
     protected $model;
@@ -32,6 +33,13 @@ class Embed extends Template
     protected $request;
     protected $modelSessionFactory;
 
+    /**
+     * Embed constructor.
+     * @param SessionFactory $sessionFactory
+     * @param WidgetFactory $modelFactory
+     * @param Template\Context $context
+     * @param array $data
+     */
     public function __construct(
         SessionFactory $sessionFactory,
         WidgetFactory $modelFactory,
@@ -47,11 +55,18 @@ class Embed extends Template
         $this->modelSessionFactory = $sessionFactory->create();
     }
 
+    /**
+     * @return string
+     */
     public function getEmbedUrl()
     {
         return self::TAWK_EMBED_URL.'/'.$this->model->getPageId().'/'.$this->model->getWidgetId();
     }
 
+    /**
+     * @return |null
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
     private function getWidgetModel()
     {
         $store = $this->storeManager->getStore();
@@ -74,6 +89,9 @@ class Embed extends Template
         return null;
     }
 
+    /**
+     * @return array|null
+     */
     public function getCurrentCustomerDetails()
     {
         if ($this->model->getEnableVisitorRecognition() != 1) {
@@ -91,6 +109,9 @@ class Embed extends Template
         ];
     }
 
+    /**
+     * @return string
+     */
     protected function _toHtml()
     {
         if ($this->model === null) {
@@ -110,7 +131,7 @@ class Embed extends Template
             $display = true;
 
             $excluded_url_list = $this->model->getExcludeUrl();
-            if (strlen($excluded_url_list) > 0) {
+            if (!!$excluded_url_list) {
                 $current_url = $httpHost . $requestUri;
                 $current_url = urldecode($current_url);
 
@@ -138,7 +159,7 @@ class Embed extends Template
             $display = false;
 
             $included_url_list = $this->model->getIncludeUrl();
-            if (strlen($included_url_list) > 0) {
+            if (!!$included_url_list) {
                 $current_url = $httpHost . $requestUri;
                 $current_url = urldecode($current_url);
 
