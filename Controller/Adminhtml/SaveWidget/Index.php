@@ -25,11 +25,33 @@ use Tawk\Widget\Model\WidgetFactory;
 
 class Index extends \Magento\Backend\App\Action
 {
+    /**
+     * @var JsonFactory 
+     */
     protected $resultJsonFactory;
+    
+    /**
+     * @var LoggerInterface 
+     */
     protected $logger;
+    
+    /**
+     * @var WidgetFactory
+     */
     protected $modelWidgetFactory;
+    
+    /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
     protected $request;
 
+    /**
+     * Index constructor.
+     * @param WidgetFactory $modelFactory
+     * @param Context $context
+     * @param JsonFactory $resultJsonFactory
+     * @param LoggerInterface $logger
+     */
     public function __construct(
         WidgetFactory $modelFactory,
         Context $context,
@@ -48,22 +70,19 @@ class Index extends \Magento\Backend\App\Action
         $response = $this->resultJsonFactory->create();
         $response->setHeader('Content-type', 'application/json');
 
-        $pageId = filter_var($this->request->getParam('pageId'), FILTER_SANITIZE_STRING);
-        $widgetId = filter_var($this->request->getParam('widgetId'), FILTER_SANITIZE_STRING);
-        $storeId = filter_var($this->request->getParam('id'), FILTER_SANITIZE_STRING);
+        $pageId = $this->request->getParam('pageId');
+        $widgetId = $this->request->getParam('widgetId');
+        $storeId = $this->request->getParam('id');
 
         if (!$pageId || !$widgetId || !$storeId) {
             return $response->setData(['success' => false]);
         }
 
-        $alwaysdisplay = filter_var($this->request->getParam('alwaysdisplay'), FILTER_SANITIZE_NUMBER_INT);
-        $excludeurl = filter_var($this->request->getParam('excludeurl'), FILTER_SANITIZE_STRING);
-        $donotdisplay = filter_var($this->request->getParam('donotdisplay'), FILTER_SANITIZE_NUMBER_INT);
-        $includeurl = filter_var($this->request->getParam('includeurl'), FILTER_SANITIZE_STRING);
-        $enableVisitorRecognition = filter_var(
-            $this->request->getParam('enableVisitorRecognition'),
-            FILTER_SANITIZE_STRING
-        );
+        $alwaysdisplay = $this->request->getParam('alwaysdisplay');
+        $excludeurl = $this->request->getParam('excludeurl');
+        $donotdisplay = $this->request->getParam('donotdisplay');
+        $includeurl = $this->request->getParam('includeurl');
+        $enableVisitorRecognition = $this->request->getParam('enableVisitorRecognition');
 
         $model = $this->modelWidgetFactory->loadByForStoreId($storeId);
 
