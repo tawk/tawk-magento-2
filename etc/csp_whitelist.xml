@@ -47,7 +47,15 @@
         <policy id="img-src">
             <values>
                 <value id="tawkto" type="host">*.tawk.to</value>
+                <value id="tawkto-link" type="host">tawk.link</value>
                 <value id="jsdelivr-cdn" type="host">cdn.jsdelivr.net</value>
+                <value id="s3" type="host">s3.amazonaws.com/</value>
+            </values>
+        </policy>
+		<policy id="media-src">
+			<values>
+				<value id="tawkto" type="host">*.tawk.to</value>
+                <value id="tawkto-link" type="host">tawk.link</value>
             </values>
         </policy>
         <policy id="connect-src">
