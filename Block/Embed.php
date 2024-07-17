@@ -98,7 +98,7 @@ class Embed extends Template
      */
     public function getEmbedUrl()
     {
-        return 'https://embed.tawk.to'.'/'.$this->model->getPageId().'/'.$this->model->getWidgetId();
+        return 'https://embed.tawk.to'.'/'.htmlspecialchars($this->model->getPageId()).'/'.htmlspecialchars($this->model->getWidgetId());
     }
 
     /**

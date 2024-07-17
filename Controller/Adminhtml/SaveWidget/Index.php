@@ -86,9 +86,9 @@ class Index extends \Magento\Backend\App\Action
         $response = $this->resultJsonFactory->create();
         $response->setHeader('Content-type', 'application/json');
 
-        $pageId = $this->request->getParam('pageId');
-        $widgetId = $this->request->getParam('widgetId');
-        $storeId = $this->request->getParam('id');
+        $pageId = strip_tags($this->request->getParam('pageId'));
+        $widgetId = strip_tags($this->request->getParam('widgetId'));
+        $storeId = preg_replace("/['\"]/", "", strip_tags($this->request->getParam('id')));
 
         if (!$pageId || !$widgetId || !$storeId) {
             return $response->setData(['success' => false]);
@@ -98,7 +98,10 @@ class Index extends \Magento\Backend\App\Action
         $excludeurl = $this->request->getParam('excludeurl');
         $donotdisplay = filter_var($this->request->getParam('donotdisplay'), FILTER_SANITIZE_NUMBER_INT);
         $includeurl = $this->request->getParam('includeurl');
-        $enableVisitorRecognition = $this->request->getParam('enableVisitorRecognition');
+        $enableVisitorRecognition = filter_var(
+            $this->request->getParam('enableVisitorRecognition'),
+            FILTER_SANITIZE_NUMBER_INT
+        );
 
         $model = $this->modelWidgetFactory->loadByForStoreId($storeId);
 
