@@ -24,7 +24,7 @@ Don’t have a tawk.to account yet? [Create one here.](https://tawk.to/?utm_sour
 2. Install the extension by executing `php composer.phar require tawk/widget`.
 
 ### Composer Artifact Installation
-1. Download the extension [installation files here](https://github.com/tawk/tawk-magento-2/archive/master.zip).
+1. Download the latest zip file [here](https://github.com/tawk/tawk-magento-2/releases).
 2. Create a folder in `<magento-installation-root-folder>` called `artifacts`.
 3. Copy the zip file to `<magento-installation-root-folder>/artifacts`.
 4. Add the repositories to your Composer repositories by executing the following commands
@@ -33,9 +33,9 @@ Don’t have a tawk.to account yet? [Create one here.](https://tawk.to/?utm_sour
 5. Install the extension by executing `php composer.phar require tawk/widget`.
 
 ### Manual Installation
-1. Download the extension [installation files here](https://github.com/tawk/tawk-magento-2/archive/master.zip).
-2. Extract the tawk-magento-2-master folder from the package.
-3. Copy the contents of tawk-magento-2-master folder to `<magento-installation-root-folder>/app/code/Tawk/Widget` folder of your website (create a new folder if necessary).
+1. Download the latest zip file [here](https://github.com/tawk/tawk-magento-2/releases).
+2. Extract the package.
+3. Copy the contents to `<magento-installation-root-folder>/app/code/Tawk/Widget` folder of your website (create a new folder if necessary).
 4. Add the dependency repository to your Composer repositories by executing `php composer.phar config repositories.tawk-url-utils vcs "https://github.com/tawk/tawk-url-utils.git"`.
 5. Install the dependency `tawk-url-util` by executing `php composer.phar require tawk/url-utils`.
 
@@ -53,9 +53,9 @@ php bin/magento cache:clean
 ```
 
 ### Manual Installation
-1. Download the latest extension [installation files here](https://github.com/tawk/tawk-magento-2/archive/master.zip).
-2. Extract the tawk-magento-2-master folder from the package.
-3. Copy the contents of tawk-magento-2-master folder to `<magento-installation-root-folder>/app/code/Tawk/Widget` folder of your website (create a new folder if necessary).
+1. Download the latest zip file [here](https://github.com/tawk/tawk-magento-2/releases).
+2. Extract the package.
+3. Copy the contents to `<magento-installation-root-folder>/app/code/Tawk/Widget` folder of your website (create a new folder if necessary).
 4. Add the dependency repository to your Composer repositories by executing `php composer.phar config repositories.tawk-url-utils vcs "https://github.com/tawk/tawk-url-utils.git"`.
 5. Install the dependency `tawk-url-util` by executing `php composer.phar require tawk/url-utils`.
 3. Then run the following magento commands to upgrade the extension.
