@@ -27,6 +27,7 @@ Destroy the container and start from scratch:
 ## Setting up the testing environment
 ### Requirements
 - The container should be accessed under `http://127.0.0.1/index.php`  with the admin page under `http://127.0.0.1/index.php/admin`
+- Before running any commands with `bin/magento`, ensure you are login as `daemon` user, use `su daemon -s /bin/bash`
 
 ### Credentials
 1. The username and password for the admin is
