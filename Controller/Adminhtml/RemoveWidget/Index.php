@@ -22,6 +22,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Psr\Log\LoggerInterface;
 use Tawk\Widget\Model\WidgetFactory;
+use Tawk\Widget\Helper\StringUtil;
 
 class Index extends \Magento\Backend\App\Action
 {
@@ -54,24 +55,34 @@ class Index extends \Magento\Backend\App\Action
     protected $request;
 
     /**
+     * String util helper
+     *
+     * @var StringUtil $helper
+     */
+    protected $helper;
+
+    /**
      * Constructor
      *
      * @param WidgetFactory $modelFactory Tawk.to Widget Model instance
      * @param Context $context App Context
      * @param JsonFactory $resultJsonFactory Json Factory instance
      * @param LoggerInterface $logger PSR Logger
+     * @param StringUtil $helper String util helper
      */
     public function __construct(
         WidgetFactory $modelFactory,
         Context $context,
         JsonFactory $resultJsonFactory,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        StringUtil $helper
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->logger = $logger;
         $this->modelWidgetFactory = $modelFactory->create();
         $this->request = $this->getRequest();
+        $this->helper = $helper;
     }
 
     /**
@@ -86,7 +97,7 @@ class Index extends \Magento\Backend\App\Action
         $response = $this->resultJsonFactory->create();
         $response->setHeader('Content-type', 'application/json');
 
-        $storeId = preg_replace("/['\"]/", "", strip_tags($this->request->getParam('id')));
+        $storeId = $this->helper->stripTagsandQuotes($this->request->getParam('id'));
         if (!$storeId) {
             return $response->setData(['success' => false]);
         }
