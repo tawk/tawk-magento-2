@@ -22,11 +22,19 @@ use Magento\Framework\Controller\ResultFactory;
 
 class Index extends \Magento\Backend\App\Action
 {
+    /**
+     * Checks current session if authorized to redirect to the tawk.to dashboard.
+     *
+     * @return boolean Returns `true` if current user is allowed to go to tawk.to dashboard. Otherwise, `false`.
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('Tawk_Widget::tawk_go_to_dashboard');
     }
 
+    /**
+     * Executes a redirect to the tawk.to dashboard
+     */
     public function execute()
     {
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

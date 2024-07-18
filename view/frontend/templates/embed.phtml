@@ -17,26 +17,27 @@
  */
 ?>
 
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API={};
-
 <?php $customer_details = $block->getCurrentCustomerDetails(); ?>
-<?php if ($customer_details !== null): ?>
-    Tawk_API.visitor = {
-        name : '<?= $block->escapeJs($customer_details['name']); ?>',
-        email : '<?= $block->escapeJs($customer_details['email']); ?>'
-    };
+<script type="text/x-magento-init">
+<?php if ($customer_details === null): ?>
+{
+    "*": {
+        "tawk-embed" : {
+            "embedUrl" : "<?= $block->escapeUrl($block->getEmbedUrl()); ?>"
+        }
+    }
+}
+<?php else: ?>
+{
+    "*": {
+        "tawk-embed" : {
+            "embedUrl" : "<?= $block->escapeUrl($block->getEmbedUrl()); ?>",
+            "visitor" : {
+                "name" : "<?=  $block->escapeJs($customer_details['name']); ?>",
+                "email" : "<?= $block->escapeJs($customer_details['email']); ?>"
+            }
+        }
+    }
+}
 <?php endif; ?>
-
-var Tawk_LoadStart=new Date();
-(function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='<?= $block->escapeUrl($block->getEmbedUrl()) ?>';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-})();
 </script>
-<!--End of Tawk.to Script-->

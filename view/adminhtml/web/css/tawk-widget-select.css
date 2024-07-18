@@ -1,0 +1,160 @@
+.websiteids:focus {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .075) inset, 0 0 8px rgba(102, 175, 233, .6);
+    border-color: #66afe9;
+    outline: 0 none;
+}
+
+.websiteids {
+    width: 350px;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .075) inset;
+    color: #555;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    transition: border-color .15s ease-in-out 0s, box-shadow .15s ease-in-out 0s;
+
+}
+
+.websiteids-label {
+    display: inline-block;
+    font-size: 15px;
+    font-weight: bold;
+    width: 200px;
+}
+
+.tawk-fields {
+    margin: 15px 0;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    display: none;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: '';
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2196f3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.savesettingsbtn {
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    color: #fff;
+    -moz-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    padding: 6px 12px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.savesettingsbtn:hover {
+    text-decoration: none;
+    color: #fff;
+}
+
+/* Tooltip */
+.tawk-tooltip {
+    position: relative;
+    display: inline;
+    color: #03a84e;
+}
+
+.tawk-tooltip .tawk-tooltiptext {
+    visibility: hidden;
+    background-color: #545454;
+    color: #fff;
+    text-align: center;
+    padding: .5rem;
+    max-width: 300px;
+    border-radius: .5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.2;
+    position: absolute;
+    z-index: 1000;
+    left: 0;
+}
+
+.tawk-tooltip .tawk-tooltiptext::before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    position: absolute;
+
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid #545454;
+    top: -5px;
+    left: 5px;
+}
+
+.tawk-tooltip:hover .tawk-tooltiptext {
+    visibility: visible;
+}

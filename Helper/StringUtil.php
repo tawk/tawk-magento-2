@@ -16,17 +16,18 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-namespace Tawk\Widget\Model\ResourceModel;
+namespace Tawk\Widget\Helper;
 
-use \Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-
-class Widget extends AbstractDb
+class StringUtil
 {
     /**
-     * Constructor
+     * Strip tags and quotes from string
+     *
+     * @param string $str
+     * @return string stripped string
      */
-    protected function _construct()
+    public function stripTagsandQuotes($str)
     {
-        $this->_init('tawk_widget', 'id');
+        return preg_replace("/['\"]/", "", strip_tags($str));
     }
 }
