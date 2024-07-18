@@ -53,7 +53,7 @@
       "build:prod": "composer install --no-dev",
       "lint": "phpcs -p -s -v --runtime-set ignore_warnings_on_exit true .",
       "lint:fix": "phpcbf -p -s -v .; err=$?; if [ $err -eq 1 ]; then exit 0; else exit $err; fi;",
-      "package": "composer run clean && mkdir -p ./tmp/tawkmagento2 && cp -r ./view ./tmp/tawkmagento2 && cp -r ./etc ./tmp/tawkmagento2 && cp -r ./Setup ./tmp/tawkmagento2 && cp -r ./Model ./tmp/tawkmagento2 && cp -r ./Controller ./tmp/tawkmagento2 && cp -r ./Block ./tmp/tawkmagento2 && cp ./registration.php ./tmp/tawkmagento2 && cp ./composer.json ./tmp/tawkmagento2 && cp README.md ./tmp/tawkmagento2 && (cd ./tmp && zip -9 -rq ./tawkmagento2.zip ./tawkmagento2)",
+      "package": "composer run clean && mkdir -p ./tmp/tawkmagento2 && cp -r ./view ./tmp/tawkmagento2 && cp -r ./etc ./tmp/tawkmagento2 && cp -r ./Setup ./tmp/tawkmagento2 && cp -r ./Model ./tmp/tawkmagento2 && cp -r ./Controller ./tmp/tawkmagento2 && cp -r ./Block ./tmp/tawkmagento2 && cp -r ./Helper ./tmp/tawkmagento2 && cp ./registration.php ./tmp/tawkmagento2 && cp ./composer.json ./tmp/tawkmagento2 && cp README.md ./tmp/tawkmagento2 && (cd ./tmp && zip -9 -rq ./tawkmagento2.zip ./tawkmagento2)",
       "clean": "rm -rf ./tmp"
   },
   "repositories": {
@@ -64,6 +64,11 @@
     "tawk-url-utils": {
       "type": "vcs",
       "url": "https://github.com/tawk/tawk-url-utils.git"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "magento/composer-dependency-version-audit-plugin": true
     }
   }
 }
