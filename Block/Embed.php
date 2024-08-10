@@ -261,6 +261,7 @@ class Embed extends Template
         });
         if (empty($checkHandles)) return false;
 
+        $existHandle = false;
         $currentPageHandles = $this->layout->getUpdate()->getHandles();
         foreach ($currentPageHandles as $handle) {
             if (in_array($handle, $checkHandles)) {
@@ -268,6 +269,6 @@ class Embed extends Template
                 break;
             }
         }
-        return isset($existHandle) ? true : false;
+        return $existHandle;
     }
 }
