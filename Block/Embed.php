@@ -202,7 +202,7 @@ class Embed extends Template
                     $current_url = strtolower($current_url);
                     $current_url = trim(strtolower($current_url));
 
-                    $excluded_url_list = preg_split("/,/", $excluded_url_list);
+                    $excluded_url_list = explode(PHP_EOL, $excluded_url_list);
                     $excluded_url_list = array_map('trim', $excluded_url_list);
                     if (UrlPatternMatcher::match($current_url, $excluded_url_list)) {
                         $display = false;
@@ -233,7 +233,7 @@ class Embed extends Template
                     $current_url = strtolower($current_url);
                     $current_url = trim(strtolower($current_url));
 
-                    $included_url_list = preg_split("/,/", $included_url_list);
+                    $included_url_list = explode(PHP_EOL, $included_url_list);
                     $included_url_list = array_map('trim', $included_url_list);
                     if (UrlPatternMatcher::match($current_url, $included_url_list)) {
                         $display = true;
@@ -250,8 +250,10 @@ class Embed extends Template
     }
 
     private function checkLayoutHandle($url_list) {
-        $array = preg_split("/,/", $url_list);
-        if (empty($array)) return false;
+        $array = explode(PHP_EOL, $url_list);
+        if (empty($array)) {
+            return false;
+        }
 
         $array = array_map('trim', $array);
         $pattern = '/^[a-z0-9_]+$/';
@@ -259,7 +261,9 @@ class Embed extends Template
         $checkHandles = array_filter($array, function($item) use ($pattern) {
             return preg_match($pattern, $item);
         });
-        if (empty($checkHandles)) return false;
+        if (empty($checkHandles)) {
+            return false;
+        }
 
         $existHandle = false;
         $currentPageHandles = $this->layout->getUpdate()->getHandles();
@@ -269,6 +273,7 @@ class Embed extends Template
                 break;
             }
         }
+
         return $existHandle;
     }
 }
