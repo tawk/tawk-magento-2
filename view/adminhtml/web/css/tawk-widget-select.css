@@ -138,11 +138,11 @@ input:checked + .slider:before {
     visibility: hidden;
     background-color: #545454;
     color: #fff;
-    text-align: center;
-    padding: .5rem;
-    max-width: 300px;
+    text-align: left;
+    padding: 1rem;
+    max-width: 400px;
     border-radius: .5rem;
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: 600;
     line-height: 1.2;
     position: absolute;
