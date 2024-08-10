@@ -56,11 +56,15 @@
         </div>
         <div class="tawk-fields" id="exlucded_urls_container">
             <label for="excludeurl">
-                (Exception) hide tawk.to widget to the following URLs or paths. Separate each entry with a comma(,).
+                (Exception) hide tawk.to widget to the following URLs or paths. Separate each entry with a comma(,).<br>
+                Layout handles (catalog_category_view, catalog_product_view, ...) are also supported. If a layout handle is present, others are ignored.<br>
             </label>
             <div class="tawk-tooltip">
                 Examples of accepted patterns
                 <ul class="tawk-tooltiptext">
+                    <li>catalog_category_view</li>
+                    <li>catalog_product_view</li>
+                    <li>cms_index_index</li>
                     <li>*</li>
                     <li>*/to/somewhere</li>
                     <li>/*/to/somewhere</li>
@@ -98,11 +102,15 @@
         </div>
         <div class="tawk-fields"  id="included_urls_container">
             <label for="includeurl">
-                (Exception) display tawk.to widget to the following URLs or paths. Separate each entry with a comma(,).
+                (Exception) display tawk.to widget to the following URLs or paths. Separate each entry with a comma(,).<br>
+                Layout handles (catalog_category_view, catalog_product_view, ...) are also supported. If a layout handle is present, others are ignored.<br>
             </label>
             <div class="tawk-tooltip">
                 Examples of accepted patterns
                 <ul class="tawk-tooltiptext">
+                    <li>catalog_category_view</li>
+                    <li>catalog_product_view</li>
+                    <li>cms_index_index</li>                    
                     <li>*</li>
                     <li>*/to/somewhere</li>
                     <li>/*/to/somewhere</li>

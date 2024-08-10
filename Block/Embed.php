@@ -24,6 +24,7 @@ use Magento\Customer\Model\SessionFactory;
 use Tawk\Modules\UrlPatternMatcher;
 use Tawk\Widget\Model\WidgetFactory;
 
+
 class Embed extends Template
 {
     /**
@@ -69,6 +70,13 @@ class Embed extends Template
     protected $modelSessionFactory;
 
     /**
+     * Layout instance
+     *
+     * @var \Magento\Framework\View\LayoutInterface $layout
+     */
+    protected $layout;
+
+    /**
      * Constructor
      *
      * @param SessionFactory $sessionFactory Session Factory instance
@@ -89,6 +97,7 @@ class Embed extends Template
         $this->model = $this->getWidgetModel();
         $this->request = $context->getRequest();
         $this->modelSessionFactory = $sessionFactory->create();
+        $this->layout = $context->getLayout();
     }
 
     /**
@@ -175,23 +184,28 @@ class Embed extends Template
 
         if ($alwaysdisplay == 1) {
             $display = true;
-
+            
             $excluded_url_list = $this->model->getExcludeUrl();
             if ($excluded_url_list !== null && strlen($excluded_url_list) > 0) {
-                $current_url = $httpHost . $requestUri;
-                $current_url = urldecode($current_url);
-
-                $ssl = !empty($httpsServer) && $httpsServer == 'on';
-                $sp = strtolower($serverProtocol);
-                $protocol = substr($sp, 0, strpos($sp, '/')) . ($ssl ? 's' : '');
-
-                $current_url = $protocol.'://'.$current_url;
-                $current_url = strtolower($current_url);
-                $current_url = trim(strtolower($current_url));
-
-                $excluded_url_list = preg_split("/,/", $excluded_url_list);
-                if (UrlPatternMatcher::match($current_url, $excluded_url_list)) {
+                $excluded_handle = $this->checkLayoutHandle($excluded_url_list);
+                if ($excluded_handle) {
                     $display = false;
+                } else {
+                    $current_url = $httpHost . $requestUri;
+                    $current_url = urldecode($current_url);
+
+                    $ssl = !empty($httpsServer) && $httpsServer == 'on';
+                    $sp = strtolower($serverProtocol);
+                    $protocol = substr($sp, 0, strpos($sp, '/')) . ($ssl ? 's' : '');
+
+                    $current_url = $protocol.'://'.$current_url;
+                    $current_url = strtolower($current_url);
+                    $current_url = trim(strtolower($current_url));
+
+                    $excluded_url_list = preg_split("/,/", $excluded_url_list);
+                    if (UrlPatternMatcher::match($current_url, $excluded_url_list)) {
+                        $display = false;
+                    }
                 }
             }
         } else {
@@ -203,20 +217,25 @@ class Embed extends Template
 
             $included_url_list = $this->model->getIncludeUrl();
             if ($included_url_list !== null && strlen($included_url_list) > 0) {
-                $current_url = $httpHost . $requestUri;
-                $current_url = urldecode($current_url);
-
-                $ssl = (!empty($httpsServer) && $httpsServer == 'on');
-                $sp = strtolower($serverProtocol);
-                $protocol = substr($sp, 0, strpos($sp, '/')) . ($ssl ? 's' : '');
-
-                $current_url = $protocol.'://'.$current_url;
-                $current_url = strtolower($current_url);
-                $current_url = trim(strtolower($current_url));
-
-                $included_url_list = preg_split("/,/", $included_url_list);
-                if (UrlPatternMatcher::match($current_url, $included_url_list)) {
+                $included_handle = $this->checkLayoutHandle($included_url_list);
+                if ($included_handle) {
                     $display = true;
+                } else {
+                    $current_url = $httpHost . $requestUri;
+                    $current_url = urldecode($current_url);
+
+                    $ssl = (!empty($httpsServer) && $httpsServer == 'on');
+                    $sp = strtolower($serverProtocol);
+                    $protocol = substr($sp, 0, strpos($sp, '/')) . ($ssl ? 's' : '');
+
+                    $current_url = $protocol.'://'.$current_url;
+                    $current_url = strtolower($current_url);
+                    $current_url = trim(strtolower($current_url));
+
+                    $included_url_list = preg_split("/,/", $included_url_list);
+                    if (UrlPatternMatcher::match($current_url, $included_url_list)) {
+                        $display = true;
+                    }
                 }
             }
         }
@@ -226,5 +245,27 @@ class Embed extends Template
         } else {
             return '';
         }
+    }
+
+    private function checkLayoutHandle($url_list) {
+        $array = preg_split("/,/", $url_list);
+        if (empty($array)) return false;
+
+        $array = array_map('trim', $array);
+        $pattern = '/^[a-z0-9_]+$/';
+    
+        $checkHandles = array_filter($array, function($item) use ($pattern) {
+            return preg_match($pattern, $item);
+        });
+        if (empty($checkHandles)) return false;
+
+        $currentPageHandles = $this->layout->getUpdate()->getHandles();
+        foreach ($currentPageHandles as $handle) {
+            if (in_array($handle, $checkHandles)) {
+                $existHandle = true;
+                break;
+            }
+        }
+        return isset($existHandle) ? true : false;
     }
 }
