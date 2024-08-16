@@ -116,7 +116,10 @@ class UpgradeData implements UpgradeDataInterface
      */
     private function addWildcardToPatternList($patternList, $storeHost)
     {
-        $splittedPatternList = preg_split("/,/", $patternList);
+        if (empty($patternList)) {
+            return '';
+        }
+        $splittedPatternList = preg_split("/,/", (string)$patternList);
         $wildcard = PathHelper::get_wildcard();
 
         $newPatternList = [];
