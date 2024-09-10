@@ -6,7 +6,6 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Zend_Uri_Http;
 
 use Tawk\Helpers\PathHelper;
 use Tawk\Widget\Model\WidgetFactory;
@@ -94,14 +93,15 @@ class UpgradeData implements UpgradeDataInterface
         $storeHost = '';
 
         $storeUrl = $this->_modelStoreManager->getStore($storeId)->getBaseUrl();
-        $parsedUrl = Zend_Uri_Http::fromString($storeUrl);
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged
+        $parsedUrl = parse_url($storeUrl);
 
-        if ($parsedUrl->getHost() !== false) {
-            $storeHost = $parsedUrl->getHost();
+        if (!empty($parsedUrl['host'])) {
+            $storeHost = $parsedUrl['host'];
         }
 
-        if ($parsedUrl->getPort() !== false) {
-            $storeHost .= ':' . $parsedUrl->getPort();
+        if (!empty($parsedUrl['port'])) {
+            $storeHost .= ':' . $parsedUrl['port'];
         }
 
         return $storeHost;
@@ -116,7 +116,10 @@ class UpgradeData implements UpgradeDataInterface
      */
     private function addWildcardToPatternList($patternList, $storeHost)
     {
-        $splittedPatternList = preg_split("/,/", $patternList);
+        if (empty($patternList)) {
+            return '';
+        }
+        $splittedPatternList = preg_split("/,/", (string)$patternList);
         $wildcard = PathHelper::get_wildcard();
 
         $newPatternList = [];
