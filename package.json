@@ -1,7 +1,7 @@
 {
   "name": "tawk-magento-2",
   "private": true,
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Free live chat widget for your site",
   "scripts": {
     "build": "npm install && composer run build:dev",
