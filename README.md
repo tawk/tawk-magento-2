@@ -2,6 +2,10 @@
 
 Free live chat widget for your site
 
+***
+**Development and releases have been moved to this [fork](https://github.com/tawk/tawk-magento-2-package) because the package has been published on Packagist under a new module name. To maintain support for previous installations, we have decided to archive this repository. Please visit the fork for the latest releases and support.**
+***
+
 ## Description
 
 The tawk.to Live Chat app makes it easy to monitor and chat with visitors on your website. Be there when they need you with unlimited messaging, ticketing and your own Knowledge Base — all 100% FREE.
